@@ -1,2 +1,2 @@
 # calculadora-pcs
-Cálculadora para PCS
+Calculadora para PCS
