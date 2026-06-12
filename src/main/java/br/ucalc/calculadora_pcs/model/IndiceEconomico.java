@@ -1,4 +1,4 @@
-package model;
+package br.ucalc.calculadora_pcs.model;
 
 import br.ucalc.calculadora_pcs.model.enums.TipoIndice;
 import jakarta.persistence.*;

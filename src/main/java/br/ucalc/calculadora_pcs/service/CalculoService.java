@@ -1,4 +1,4 @@
-package service;
+package br.ucalc.calculadora_pcs.service;
 
 import br.ucalc.calculadora_pcs.model.Calculo;
 import br.ucalc.calculadora_pcs.model.IndiceEconomico;

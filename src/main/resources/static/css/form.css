@@ -1,0 +1,124 @@
+/* ============================================
+   Estilos específicos do formulário - layout moderno
+   ============================================ */
+
+.icone-secao {
+    width: 20px;
+    height: 20px;
+    vertical-align: -4px;
+    margin-right: 6px;
+    color: var(--amarelo-destaque);
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo .form-control,
+.campo .form-select {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.campo .form-control:focus,
+.campo .form-select:focus {
+    transform: translateY(-1px);
+}
+
+/* Input com prefixo "R$" */
+.input-prefixo {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-prefixo:focus-within {
+    border-color: var(--azul-secundario);
+    box-shadow: 0 0 0 3px rgba(21, 64, 110, 0.15);
+}
+
+.input-prefixo span {
+    background-color: var(--azul-claro);
+    color: var(--azul-principal);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    font-size: 0.9rem;
+}
+
+.input-prefixo input {
+    border: none;
+    flex: 1;
+    border-radius: 0;
+}
+
+.input-prefixo input:focus {
+    box-shadow: none;
+    transform: none;
+}
+
+/* Barra de ações (botão calcular) */
+.barra-acoes {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.barra-acoes .btn {
+    min-width: 160px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Spinner de carregamento no botão */
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: var(--branco);
+    border-radius: 50%;
+    animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+/* Animação leve de entrada dos cards */
+.card-secao {
+    animation: surgir 0.3s ease-out;
+}
+
+@keyframes surgir {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-secao:nth-of-type(2) {
+    animation-delay: 0.08s;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}

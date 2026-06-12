@@ -1,4 +1,4 @@
-package model;
+package br.ucalc.calculadora_pcs.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;

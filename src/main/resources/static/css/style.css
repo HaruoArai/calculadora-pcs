@@ -1,0 +1,297 @@
+/* ============================================
+   Calculadora Judicial - UCALC/PCS - PGE/MS
+   Paleta institucional: azul escuro + amarelo queimado
+   ============================================ */
+
+:root {
+    --azul-principal: #0d2b4e;
+    --azul-secundario: #15406e;
+    --azul-claro: #e8eef5;
+    --amarelo-destaque: #c8860d;
+    --amarelo-hover: #b3760a;
+    --cinza-texto: #333333;
+    --cinza-borda: #d5dce4;
+    --branco: #ffffff;
+    --vermelho-erro: #c0392b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: var(--cinza-texto);
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   CABEÇALHO / TOPO INSTITUCIONAL
+   ============================================ */
+
+.cabecalho-sistema {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+
+    padding: 1rem 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 20px;
+
+    border-bottom: 4px solid var(--amarelo-destaque);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.logo-sistema {
+    height: 80px;
+    width: auto;
+}
+
+.titulo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.titulo-container h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.titulo-container .subtitulo {
+    margin-top: 4px;
+    color: var(--amarelo-destaque);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+
+/* ============================================
+   CONTAINER GERAL
+   ============================================ */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+
+    flex: 1;
+}
+
+/* ============================================
+   CARDS / SEÇÕES DE FORMULÁRIO
+   ============================================ */
+
+.card-secao {
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-borda);
+    border-radius: 6px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-secao h5 {
+    color: var(--azul-principal);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--amarelo-destaque);
+    display: inline-block;
+}
+
+/* ============================================
+   FORMULÁRIOS
+   ============================================ */
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--azul-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.3rem;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--azul-secundario);
+    box-shadow: 0 0 0 3px rgba(21, 64, 110, 0.15);
+    outline: none;
+}
+
+.text-danger {
+    color: var(--vermelho-erro);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
+
+.btn-primary {
+    background-color: var(--azul-principal);
+    border: 1px solid var(--azul-principal);
+    color: var(--branco);
+    font-weight: 600;
+    padding: 0.6rem 1.8rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--azul-secundario);
+    border-color: var(--azul-secundario);
+}
+
+.btn-destaque {
+    background-color: var(--amarelo-destaque);
+    border: 1px solid var(--amarelo-destaque);
+    color: var(--branco);
+    font-weight: 600;
+    padding: 0.6rem 1.8rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-destaque:hover {
+    background-color: var(--amarelo-hover);
+    border-color: var(--amarelo-hover);
+    color: var(--branco);
+}
+
+.btn-secondary {
+    background-color: var(--branco);
+    border: 1px solid var(--azul-principal);
+    color: var(--azul-principal);
+    font-weight: 600;
+    padding: 0.6rem 1.8rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+}
+
+/* ============================================
+   TABELA DE RESULTADOS
+   ============================================ */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--branco);
+    font-size: 0.9rem;
+}
+
+.table thead th {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 3px solid var(--amarelo-destaque);
+}
+
+.table tbody td {
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid var(--cinza-borda);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: var(--azul-claro);
+}
+
+.table tbody tr:hover {
+    background-color: #dde7f2;
+}
+
+.table tbody tr:last-child td {
+    font-weight: 700;
+    color: var(--azul-principal);
+}
+
+/* ============================================
+   RODAPÉ
+   ============================================ */
+
+.rodape-sistema {
+    background-color: var(--azul-principal);
+    color: rgba(255,255,255,0.8);
+
+    text-align: center;
+
+    padding: 0.8rem 1rem;
+
+    font-size: 0.8rem;
+}
+
+/* ============================================
+   DADOS DO PROCESSO (resumo no resultado)
+   ============================================ */
+
+.dados-processo p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+}
+
+.dados-processo strong {
+    color: var(--azul-principal);
+    margin-right: 0.3rem;
+}
+
+/* ============================================
+   RESPONSIVIDADE BÁSICA
+   ============================================ */
+
+@media (max-width: 768px) {
+    .cabecalho-sistema {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .card-secao {
+        padding: 1rem;
+    }
+}

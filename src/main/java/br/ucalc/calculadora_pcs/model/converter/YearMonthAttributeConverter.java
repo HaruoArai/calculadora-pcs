@@ -1,4 +1,4 @@
-package model.converter;
+package br.ucalc.calculadora_pcs.model.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

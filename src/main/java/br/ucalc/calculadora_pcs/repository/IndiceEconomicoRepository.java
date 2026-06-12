@@ -1,4 +1,4 @@
-package repository;
+package br.ucalc.calculadora_pcs.repository;
 
 import br.ucalc.calculadora_pcs.model.IndiceEconomico;
 import br.ucalc.calculadora_pcs.model.enums.TipoIndice;
