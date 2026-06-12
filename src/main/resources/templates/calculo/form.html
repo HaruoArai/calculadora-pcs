@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <!-- ================= DADOS DO CÁLCULO ================= -->
+        <!-- ================= DADOS DO CÁLCULO =================
         <div class="card-secao">
             <h5>
                 <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -85,16 +85,16 @@
 
             <div class="grid grid-3">
                 <div class="campo">
-                    <label class="form-label">Data inicial</label>
+                    <label class="form-label">Competência inicial</label>
                     <input type="text" class="form-control mask-data" placeholder="dd/mm/aaaa"
-                           th:field="*{dataInicial}" inputmode="numeric" maxlength="10">
-                    <span class="text-danger" th:if="${#fields.hasErrors('dataInicial')}" th:errors="*{dataInicial}"></span>
+                           th:field="*{competenciaInicial}" inputmode="numeric" maxlength="10">
+                    <span class="text-danger" th:if="${#fields.hasErrors('competenciaInicial')}" th:errors="*{competenciaInicial}"></span>
                 </div>
                 <div class="campo">
-                    <label class="form-label">Data final</label>
+                    <label class="form-label">Competência final</label>
                     <input type="text" class="form-control mask-data" placeholder="dd/mm/aaaa"
-                           th:field="*{dataFinal}" inputmode="numeric" maxlength="10">
-                    <span class="text-danger" th:if="${#fields.hasErrors('dataFinal')}" th:errors="*{dataFinal}"></span>
+                           th:field="*{competenciaFinal}" inputmode="numeric" maxlength="10">
+                    <span class="text-danger" th:if="${#fields.hasErrors('competenciaFinal')}" th:errors="*{competenciaFinal}"></span>
                 </div>
                 <div class="campo">
                     <label class="form-label">Valor devido (R$)</label>
@@ -126,8 +126,161 @@
                 </div>
             </div>
         </div>
+        -->
 
-        <!-- ================= AÇÕES ================= -->
+        <!-- ================= CORREÇÃO MONETÁRIA E JUROS ================= -->
+        <div class="card-secao">
+            <h5>
+                <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"/>
+                    <line x1="8" y1="7" x2="16" y2="7"/>
+                    <line x1="8" y1="11" x2="10" y2="11"/>
+                    <line x1="14" y1="11" x2="16" y2="11"/>
+                    <line x1="8" y1="15" x2="10" y2="15"/>
+                    <line x1="14" y1="15" x2="16" y2="15"/>
+                </svg>
+                Correção Monetária
+            </h5>
+
+            <div class="grid grid-3">
+
+                <div class="campo">
+                    <label class="form-label">
+                        Tipo de Correção Monetária
+                    </label>
+
+                    <select class="form-select"
+                            th:field="*{tipoCorrecao}">
+                        <option value="">Selecione</option>
+                        <option th:each="tipo : ${tiposCorrecao}"
+                                th:value="${tipo}"
+                                th:text="${tipo.descricao}">
+                        </option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label class="form-label">
+                        Data Inicial
+                    </label>
+
+                    <input type="text"
+                           class="form-control mask-data"
+                           placeholder="dd/mm/aaaa"
+                           th:field="*{dataInicioCorrecao}">
+                </div>
+                <div class="campo">
+                    <label class="form-label">
+                        Data Final
+                    </label>
+                    <input type="text"
+                           class="form-control mask-data"
+                           placeholder="dd/mm/aaaa"
+                           th:field="*{dataFimCorrecao}">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-secao">
+            <h5>
+                <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <line x1="12" y1="7" x2="12" y2="17"/>
+                    <path d="M9 10h6"/>
+                </svg>
+                Juros de Mora
+            </h5>
+
+            <div class="grid grid-3">
+
+                <div class="campo">
+                    <label class="form-label">
+                        Tipo de Juros
+                    </label>
+
+                    <select class="form-select"
+                            th:field="*{tipoJuros}">
+                        <option value="">Selecione</option>
+                        <option th:each="tipo : ${tiposJuros}"
+                                th:value="${tipo}"
+                                th:text="${tipo.descricao}">
+                        </option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label class="form-label">
+                        Data Inicial
+                    </label>
+                    <input type="text"
+                           class="form-control mask-data"
+                           placeholder="dd/mm/aaaa"
+                           th:field="*{dataInicioJuros}">
+                </div>
+                <div class="campo">
+                    <label class="form-label">
+                        Data Final
+                    </label>
+                    <input type="text"
+                           class="form-control mask-data"
+                           placeholder="dd/mm/aaaa"
+                           th:field="*{dataFimJuros}">
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= DADOS DAS PARCELAS ================= -->
+        <div class="card-secao">
+
+            <h5>
+                <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                    <line x1="3" y1="16" x2="21" y2="16"/>
+                </svg>
+                Dados da Parcela
+            </h5>
+
+            <div class="grid grid-3">
+
+                <div class="campo">
+                    <label class="form-label">
+                        Competência Inicial
+                    </label>
+
+                    <input
+                            type="text"
+                            class="form-control mask-data"
+                            placeholder="dd/mm/aaaa"
+                            th:field="*{competenciaInicial}">
+                </div>
+
+                <div class="campo">
+                    <label class="form-label">
+                        Competência Final
+                    </label>
+
+                    <input
+                            type="text"
+                            class="form-control mask-data"
+                            placeholder="dd/mm/aaaa"
+                            th:field="*{competenciaFinal}">
+                </div>
+
+                <div class="campo">
+                    <label class="form-label">
+                        Valor da Parcela (R$)
+                    </label>
+                    <div class="input-prefixo">
+                        <span>R$</span>
+                        <input
+                                type="text"
+                                class="form-control mask-moeda"
+                                th:field="*{valorDevidoInicial}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                    <!-- ================= AÇÕES ================= -->
         <div class="barra-acoes">
             <button type="submit" class="btn btn-destaque" id="btn-calcular">
                 <span class="btn-texto">Calcular</span>

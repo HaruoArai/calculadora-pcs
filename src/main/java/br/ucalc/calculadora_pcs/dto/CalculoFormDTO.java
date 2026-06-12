@@ -23,13 +23,29 @@ public class CalculoFormDTO {
     private String vara;
     private String pgenet;
 
-    @NotNull(message = "Informe a data inicial")
+    @NotNull(message = "Informe a data inicial da correção")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataInicial;
+    private LocalDate dataInicioCorrecao;
 
-    @NotNull(message = "Informe a data final")
+    @NotNull(message = "Informe a data final da correção")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataFinal;
+    private LocalDate dataFimCorrecao;
+
+    @NotNull(message = "Informe a data inicial dos juros")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataInicioJuros;
+
+    @NotNull(message = "Informe a data final dos juros")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataFimJuros;
+
+    @NotNull(message = "Informe a competência inicial")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate competenciaInicial;
+
+    @NotNull(message = "Informe a competência final")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate competenciaFinal;
 
     @NotNull(message = "Selecione o tipo de correção")
     private TipoCorrecao tipoCorrecao;
@@ -60,11 +76,47 @@ public class CalculoFormDTO {
     public String getPgenet() { return pgenet; }
     public void setPgenet(String pgenet) { this.pgenet = pgenet; }
 
-    public LocalDate getDataInicial() { return dataInicial; }
-    public void setDataInicial(LocalDate dataInicial) { this.dataInicial = dataInicial; }
+    public LocalDate getDataInicioCorrecao() {
+        return dataInicioCorrecao;
+    }
+    public void setDataInicioCorrecao(LocalDate dataInicioCorrecao) {
+        this.dataInicioCorrecao = dataInicioCorrecao;
+    }
 
-    public LocalDate getDataFinal() { return dataFinal; }
-    public void setDataFinal(LocalDate dataFinal) { this.dataFinal = dataFinal; }
+    public LocalDate getDataFimCorrecao() {
+        return dataFimCorrecao;
+    }
+    public void setDataFimCorrecao(LocalDate dataFimCorrecao) {
+        this.dataFimCorrecao = dataFimCorrecao;
+    }
+
+    public LocalDate getDataInicioJuros() {
+        return dataInicioJuros;
+    }
+    public void setDataInicioJuros(LocalDate dataInicioJuros) {
+        this.dataInicioJuros = dataInicioJuros;
+    }
+
+    public LocalDate getDataFimJuros() {
+        return dataFimJuros;
+    }
+    public void setDataFimJuros(LocalDate dataFimJuros) {
+        this.dataFimJuros = dataFimJuros;
+    }
+
+    public LocalDate getCompetenciaInicial() {
+        return competenciaInicial;
+    }
+    public void setCompetenciaInicial(LocalDate competenciaInicial) {
+        this.competenciaInicial = competenciaInicial;
+    }
+
+    public LocalDate getCompetenciaFinal() {
+        return competenciaFinal;
+    }
+    public void setCompetenciaFinal(LocalDate competenciaFinal) {
+        this.competenciaFinal = competenciaFinal;
+    }
 
     public TipoCorrecao getTipoCorrecao() { return tipoCorrecao; }
     public void setTipoCorrecao(TipoCorrecao tipoCorrecao) { this.tipoCorrecao = tipoCorrecao; }

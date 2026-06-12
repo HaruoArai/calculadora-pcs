@@ -20,8 +20,14 @@ public class Calculo {
     @JoinColumn(name = "processo_id")
     private Processo processo;
 
-    private LocalDate dataInicial;
-    private LocalDate dataFinal;
+    private LocalDate dataInicioCorrecao;
+    private LocalDate dataFimCorrecao;
+
+    private LocalDate dataInicioJuros;
+    private LocalDate dataFimJuros;
+
+    private LocalDate competenciaInicial;
+    private LocalDate competenciaFinal;
 
     @Enumerated(EnumType.STRING)
     private TipoCorrecao tipoCorrecao;
@@ -44,11 +50,47 @@ public class Calculo {
     public Processo getProcesso() { return processo; }
     public void setProcesso(Processo processo) { this.processo = processo; }
 
-    public LocalDate getDataInicial() { return dataInicial; }
-    public void setDataInicial(LocalDate dataInicial) { this.dataInicial = dataInicial; }
+    public LocalDate getCompetenciaInicial() {
+        return competenciaInicial;
+    }
+    public void setCompetenciaInicial(LocalDate competenciaInicial) {
+        this.competenciaInicial = competenciaInicial;
+    }
 
-    public LocalDate getDataFinal() { return dataFinal; }
-    public void setDataFinal(LocalDate dataFinal) { this.dataFinal = dataFinal; }
+    public LocalDate getCompetenciaFinal() {
+        return competenciaFinal;
+    }
+    public void setCompetenciaFinal(LocalDate competenciaFinal) {
+        this.competenciaFinal = competenciaFinal;
+    }
+
+    public LocalDate getDataInicioCorrecao() {
+        return dataInicioCorrecao;
+    }
+    public void setDataInicioCorrecao(LocalDate dataInicioCorrecao) {
+        this.dataInicioCorrecao = dataInicioCorrecao;
+    }
+
+    public LocalDate getDataFimCorrecao() {
+        return dataFimCorrecao;
+    }
+    public void setDataFimCorrecao(LocalDate dataFimCorrecao) {
+        this.dataFimCorrecao = dataFimCorrecao;
+    }
+
+    public LocalDate getDataInicioJuros() {
+        return dataInicioJuros;
+    }
+    public void setDataInicioJuros(LocalDate dataInicioJuros) {
+        this.dataInicioJuros = dataInicioJuros;
+    }
+
+    public LocalDate getDataFimJuros() {
+        return dataFimJuros;
+    }
+    public void setDataFimJuros(LocalDate dataFimJuros) {
+        this.dataFimJuros = dataFimJuros;
+    }
 
     public TipoCorrecao getTipoCorrecao() { return tipoCorrecao; }
     public void setTipoCorrecao(TipoCorrecao tipoCorrecao) { this.tipoCorrecao = tipoCorrecao; }

@@ -32,8 +32,8 @@ public class CalculoService {
     }
 
     public List<ItemCalculo> gerarTabela(Calculo calculo) {
-        YearMonth mesInicial = YearMonth.from(calculo.getDataInicial());
-        YearMonth mesFinal = YearMonth.from(calculo.getDataFinal());
+        YearMonth mesInicial = YearMonth.from(calculo.getCompetenciaInicial());
+        YearMonth mesFinal = YearMonth.from(calculo.getCompetenciaFinal());
         BigDecimal valorBase = calculo.getValorDevidoInicial();
 
         List<ItemCalculo> itens = new ArrayList<>();
@@ -89,19 +89,64 @@ public class CalculoService {
         return itens;
     }
 
-    private BigDecimal buscarIndiceCorrecao(TipoCorrecao tipoCorrecao, YearMonth mes) {
-        TipoIndice tipoIndice = switch (tipoCorrecao) {
-            case IPCA_E -> TipoIndice.IPCA_E;
-            case TR -> TipoIndice.TR;
-            case SELIC -> TipoIndice.SELIC;
-            case TODAS -> throw new UnsupportedOperationException(
-                    "Opção 'TODAS' ainda não implementada"); // TODO
-        };
-
-        return indiceEconomicoRepository.findByTipoAndReferencia(tipoIndice, mes)
+    private BigDecimal buscarIndiceCorrecao(
+            TipoCorrecao tipoCorrecao,
+            YearMonth mes) {
+        TipoIndice tipoIndice = descobrirIndiceCorrecao(
+                tipoCorrecao,
+                mes);
+        return indiceEconomicoRepository
+                .findByTipoAndReferencia(
+                        tipoIndice,
+                        mes)
                 .map(IndiceEconomico::getValor)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Índice " + tipoIndice + " não cadastrado para " + mes));
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "Índice "
+                                        + tipoIndice
+                                        + " não cadastrado para "
+                                        + mes));
+    }
+
+    private TipoIndice descobrirIndiceCorrecao(
+            TipoCorrecao tipoCorrecao,
+            YearMonth referencia) {
+        YearMonth marcoIpcae =
+                YearMonth.of(2015, 3);
+        YearMonth marcoSelic =
+                YearMonth.of(2021, 12);
+        return switch (tipoCorrecao) {
+            case TR_IPCAE -> {
+                if (referencia.isBefore(marcoIpcae)) {
+                    yield TipoIndice.TR;
+                }
+                yield TipoIndice.IPCA_E;
+            }
+            case TR_IPCAE_SELIC -> {
+                if (referencia.isBefore(marcoIpcae)) {
+                    yield TipoIndice.TR;
+                }
+                if (referencia.isBefore(marcoSelic)) {
+                    yield TipoIndice.IPCA_E;
+                }
+                yield TipoIndice.SELIC;
+            }
+            case TR_SELIC -> {
+                if (referencia.isBefore(marcoSelic)) {
+                    yield TipoIndice.TR;
+                }
+                yield TipoIndice.SELIC;
+            }
+            case IPCAE_SELIC -> {
+                if (referencia.isBefore(marcoSelic)) {
+                    yield TipoIndice.IPCA_E;
+                }
+                yield TipoIndice.SELIC;
+            }
+            case TR -> TipoIndice.TR;
+            case IPCAE -> TipoIndice.IPCA_E;
+            case SELIC -> TipoIndice.SELIC;
+        };
     }
 
     private BigDecimal buscarIndiceJuros(
@@ -109,27 +154,16 @@ public class CalculoService {
             YearMonth mes) {
 
         switch (tipoJuros) {
-
-            case MORA_MENSAL:
+            case SEM_JUROS:
+                return BigDecimal.ZERO;
+            case MORA:
                 return BigDecimal.valueOf(0.5);
-
-            case POUPANCA:
-
-                return indiceEconomicoRepository
-                        .findByTipoAndReferencia(
-                                TipoIndice.POUPANCA,
-                                mes)
-                        .map(IndiceEconomico::getValor)
-                        .orElseThrow(() ->
-                                new IllegalStateException(
-                                        "Índice POUPANCA não cadastrado para " + mes));
-
-            case TODAS:
+            case MORA_POUPANCA:
                 throw new UnsupportedOperationException(
-                        "Opção TODAS ainda não implementada");
-
+                        "MORA_POUPANCA ainda não implementado");
             default:
-                throw new IllegalStateException("Tipo de juros inválido");
+                throw new IllegalStateException(
+                        "Tipo de juros inválido");
         }
     }
 }
