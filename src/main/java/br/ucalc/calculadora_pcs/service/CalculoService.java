@@ -7,6 +7,7 @@ import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
 import br.ucalc.calculadora_pcs.model.enums.TipoIndice;
 import br.ucalc.calculadora_pcs.repository.IndiceEconomicoRepository;
 import org.springframework.stereotype.Service;
+import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -59,15 +60,23 @@ public class CalculoService {
                     .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
             item.setValorAtualizado(valorAtualizado);
 
-            // ---- Juros de mora (0,5% a.m. -> dias corridos / 6000) ----
-            long mesesDecorridos = ChronoUnit.MONTHS.between(mesInicial, mesAtual);
-            BigDecimal diasCorridos = BigDecimal.valueOf(mesesDecorridos + 1).multiply(TRINTA);
-            BigDecimal taxaJuros = diasCorridos.divide(SEIS_MIL, ESCALA_INTERMEDIARIA, RoundingMode.HALF_UP);
-            item.setIndiceJuros(taxaJuros);
+            BigDecimal indiceJurosMes =
+                    buscarIndiceJuros(
+                            calculo.getTipoJuros(),
+                            mesAtual);
+
+            item.setIndiceJuros(indiceJurosMes);
 
             BigDecimal valorJuros = valorAtualizado
-                    .multiply(taxaJuros)
+                    .multiply(
+                            indiceJurosMes.divide(
+                                    CEM,
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP
+                            )
+                    )
                     .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
             item.setValorJuros(valorJuros);
 
             // ---- Total ----
@@ -93,5 +102,34 @@ public class CalculoService {
                 .map(IndiceEconomico::getValor)
                 .orElseThrow(() -> new IllegalStateException(
                         "Índice " + tipoIndice + " não cadastrado para " + mes));
+    }
+
+    private BigDecimal buscarIndiceJuros(
+            br.ucalc.calculadora_pcs.model.enums.TipoJuros tipoJuros,
+            YearMonth mes) {
+
+        switch (tipoJuros) {
+
+            case MORA_MENSAL:
+                return BigDecimal.valueOf(0.5);
+
+            case POUPANCA:
+
+                return indiceEconomicoRepository
+                        .findByTipoAndReferencia(
+                                TipoIndice.POUPANCA,
+                                mes)
+                        .map(IndiceEconomico::getValor)
+                        .orElseThrow(() ->
+                                new IllegalStateException(
+                                        "Índice POUPANCA não cadastrado para " + mes));
+
+            case TODAS:
+                throw new UnsupportedOperationException(
+                        "Opção TODAS ainda não implementada");
+
+            default:
+                throw new IllegalStateException("Tipo de juros inválido");
+        }
     }
 }
