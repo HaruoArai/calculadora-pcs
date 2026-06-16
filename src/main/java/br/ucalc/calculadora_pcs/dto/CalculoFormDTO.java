@@ -6,6 +6,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
+import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,29 +24,19 @@ public class CalculoFormDTO {
     private String vara;
     private String pgenet;
 
-    @NotNull(message = "Informe a data inicial da correção")
+    @NotNull(message = "Informe a data final da atualização")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataInicioCorrecao;
+    private LocalDate dataAtualizacao;
 
-    @NotNull(message = "Informe a data final da correção")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataFimCorrecao;
+    private TipoEmenda tipoEmenda = TipoEmenda.NENHUMA;
 
-    @NotNull(message = "Informe a data inicial dos juros")
+    @NotNull(message = "Informe a data da citação")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataInicioJuros;
+    private LocalDate dataCitacao;
 
-    @NotNull(message = "Informe a data final dos juros")
+    @NotNull(message = "Informe a data da parcela")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataFimJuros;
-
-    @NotNull(message = "Informe a competência inicial")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate competenciaInicial;
-
-    @NotNull(message = "Informe a competência final")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate competenciaFinal;
+    private LocalDate dataParcela;
 
     @NotNull(message = "Selecione o tipo de correção")
     private TipoCorrecao tipoCorrecao;
@@ -76,46 +67,32 @@ public class CalculoFormDTO {
     public String getPgenet() { return pgenet; }
     public void setPgenet(String pgenet) { this.pgenet = pgenet; }
 
-    public LocalDate getDataInicioCorrecao() {
-        return dataInicioCorrecao;
+    public LocalDate getDataAtualizacao() {
+        return dataAtualizacao;
     }
-    public void setDataInicioCorrecao(LocalDate dataInicioCorrecao) {
-        this.dataInicioCorrecao = dataInicioCorrecao;
-    }
-
-    public LocalDate getDataFimCorrecao() {
-        return dataFimCorrecao;
-    }
-    public void setDataFimCorrecao(LocalDate dataFimCorrecao) {
-        this.dataFimCorrecao = dataFimCorrecao;
+    public void setDataAtualizacao(LocalDate dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 
-    public LocalDate getDataInicioJuros() {
-        return dataInicioJuros;
+    public TipoEmenda getTipoEmenda() {
+        return tipoEmenda;
     }
-    public void setDataInicioJuros(LocalDate dataInicioJuros) {
-        this.dataInicioJuros = dataInicioJuros;
-    }
-
-    public LocalDate getDataFimJuros() {
-        return dataFimJuros;
-    }
-    public void setDataFimJuros(LocalDate dataFimJuros) {
-        this.dataFimJuros = dataFimJuros;
+    public void setTipoEmenda(TipoEmenda tipoEmenda) {
+        this.tipoEmenda = tipoEmenda;
     }
 
-    public LocalDate getCompetenciaInicial() {
-        return competenciaInicial;
+    public LocalDate getDataCitacao() {
+        return dataCitacao;
     }
-    public void setCompetenciaInicial(LocalDate competenciaInicial) {
-        this.competenciaInicial = competenciaInicial;
+    public void setDataCitacao(LocalDate dataCitacao) {
+        this.dataCitacao = dataCitacao;
     }
 
-    public LocalDate getCompetenciaFinal() {
-        return competenciaFinal;
+    public LocalDate getDataParcela() {
+        return dataParcela;
     }
-    public void setCompetenciaFinal(LocalDate competenciaFinal) {
-        this.competenciaFinal = competenciaFinal;
+    public void setDataParcela(LocalDate dataParcela) {
+        this.dataParcela = dataParcela;
     }
 
     public TipoCorrecao getTipoCorrecao() { return tipoCorrecao; }

@@ -26,35 +26,84 @@
     </div>
 
     <div class="card-processo">
-        <div class="col-md-6">
-            <p><strong>Autor:</strong> <span th:text="${calculo.processo.autor}"></span></p>
-            <p><strong>Réu:</strong> <span th:text="${calculo.processo.reu}"></span></p>
-            <p><strong>Autos:</strong> <span th:text="${calculo.processo.autos}"></span></p>
-        </div>
-        <div class="col-md-6">
-            <p><strong>Comarca:</strong> <span th:text="${calculo.processo.comarca}"></span></p>
-            <p><strong>Vara:</strong> <span th:text="${calculo.processo.vara}"></span></p>
-            <p><strong>PGENET:</strong> <span th:text="${calculo.processo.pgenet}"></span></p>
+        <h5>
+            <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Dados do Processo
+        </h5>
+        <div class="grid-info grid-info-2">
+            <div class="item-info">
+                <span class="label-info">Autor</span>
+                <span class="valor-info" th:text="${calculo.processo.autor}"></span>
+            </div>
+            <div class="item-info">
+                <span class="label-info">Réu</span>
+                <span class="valor-info" th:text="${calculo.processo.reu}"></span>
+            </div>
+            <div class="item-info">
+                <span class="label-info">Autos</span>
+                <span class="valor-info" th:text="${calculo.processo.autos}"></span>
+            </div>
+            <div class="item-info">
+                <span class="label-info">Comarca</span>
+                <span class="valor-info" th:text="${calculo.processo.comarca}"></span>
+            </div>
+            <div class="item-info">
+                <span class="label-info">Vara</span>
+                <span class="valor-info" th:text="${calculo.processo.vara}"></span>
+            </div>
+            <div class="item-info">
+                <span class="label-info">PGENET</span>
+                <span class="valor-info" th:text="${calculo.processo.pgenet}"></span>
+            </div>
         </div>
     </div>
 
     <div class="card-parametros">
-        <h5>Parâmetros Utilizados</h5>
-        <div class="row">
-            <div class="col-md-4">
-                <strong>Período:</strong><br>
-                <span th:text="${#temporals.format(calculo.dataInicial,'dd/MM/yyyy')}"></span>
-                até
-                <span th:text="${#temporals.format(calculo.dataFinal,'dd/MM/yyyy')}"></span>
+        <h5>
+            <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Parâmetros Utilizados
+        </h5>
+        <div class="grid-info grid-info-3">
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Período da Parcela</span>
+                <span class="valor-info">
+                <span th:text="${#temporals.format(calculo.dataParcela,'dd/MM/yyyy')}"></span>
+                <span class="separador-periodo">até</span>
+                <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+            </span>
             </div>
-            <div class="col-md-4">
-                <strong>Correção Monetária:</strong><br>
-                <span th:text="${calculo.tipoCorrecao.descricao}"></span>
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Data da Citação</span>
+                <span class="valor-info" th:text="${#temporals.format(calculo.dataCitacao,'dd/MM/yyyy')}"></span>
             </div>
-            <div class="col-md-4">
-                <strong>Juros:</strong><br>
-                <span th:text="${calculo.tipoJuros.descricao}"></span>
+            <div class="item-info"></div>
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Correção Monetária</span>
+                <span class="valor-info badge-parametro" th:text="${calculo.tipoCorrecao.descricao}"></span>
             </div>
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Juros</span>
+                <span class="valor-info badge-parametro" th:text="${calculo.tipoJuros.descricao}"></span>
+            </div>
+            <div class="item-info"></div>
+            <!--
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Regra Constitucional</span>
+                <span class="valor-info badge-parametro"
+                      th:text="${calculo.tipoEmenda.descricao}">
+                </span>
+            </div>
+            -->
         </div>
     </div>
 

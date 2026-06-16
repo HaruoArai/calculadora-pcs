@@ -122,3 +122,72 @@
 @media (max-width: 600px) {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
+
+/* CHIPS DA CORREÇÃO MONETÁRIA*/
+
+/* ============================================
+   CHIPS DE SELEÇÃO (Regra Constitucional)
+   ============================================ */
+
+.opcoes-emenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.opcao-chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border: 1.5px solid var(--cinza-borda);
+    border-radius: 999px;
+    background-color: var(--branco);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--cinza-texto);
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.opcao-chip input[type="radio"] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--cinza-borda);
+    margin: 0;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+    position: relative;
+}
+
+.opcao-chip input[type="radio"]:checked {
+    border-color: var(--amarelo-destaque);
+    background-color: var(--amarelo-destaque);
+    box-shadow: inset 0 0 0 2px var(--branco);
+}
+
+.opcao-chip:hover {
+    border-color: var(--azul-secundario);
+    background-color: var(--azul-claro);
+}
+
+.opcao-chip:has(input:checked) {
+    border-color: var(--azul-principal);
+    background-color: var(--azul-claro);
+    color: var(--azul-principal);
+    font-weight: 600;
+}
+
+.opcao-chip:has(input:checked) span {
+    color: var(--azul-principal);
+}
+
+/* fw-semibold (classe do Bootstrap, garantindo o peso correto) */
+.fw-semibold {
+    font-weight: 600;
+}

@@ -20,8 +20,6 @@ import java.util.List;
 public class CalculoService {
 
     private static final BigDecimal CEM = BigDecimal.valueOf(100);
-    private static final BigDecimal SEIS_MIL = BigDecimal.valueOf(6000);
-    private static final BigDecimal TRINTA = BigDecimal.valueOf(30);
     private static final int ESCALA_INTERMEDIARIA = 10; // casas decimais durante os cálculos
     private static final int ESCALA_FINAL = 2;          // casas decimais nos valores em R$
 
@@ -32,12 +30,18 @@ public class CalculoService {
     }
 
     public List<ItemCalculo> gerarTabela(Calculo calculo) {
-        YearMonth mesInicial = YearMonth.from(calculo.getCompetenciaInicial());
-        YearMonth mesFinal = YearMonth.from(calculo.getCompetenciaFinal());
+        YearMonth mesInicial =
+                YearMonth.from(calculo.getDataParcela());
+        YearMonth mesFinal =
+                YearMonth.from(calculo.getDataAtualizacao());
+
+        YearMonth mesCitacao =
+                YearMonth.from(calculo.getDataCitacao());
+
         BigDecimal valorBase = calculo.getValorDevidoInicial();
 
         List<ItemCalculo> itens = new ArrayList<>();
-        BigDecimal fatorCorrecaoAcumulado = BigDecimal.ONE;
+
 
         YearMonth mesAtual = mesInicial;
         while (!mesAtual.isAfter(mesFinal)) {
@@ -47,35 +51,49 @@ public class CalculoService {
             item.setData(mesAtual.atDay(1)); // 1º dia do mês de referência
             item.setValorDevido(valorBase);
 
-            // ---- Correção monetária (fator acumulado) ----
-            BigDecimal indiceMes = buscarIndiceCorrecao(calculo.getTipoCorrecao(), mesAtual);
-            BigDecimal fatorMes = BigDecimal.ONE.add(
-                    indiceMes.divide(CEM, ESCALA_INTERMEDIARIA, RoundingMode.HALF_UP)
-            );
-            fatorCorrecaoAcumulado = fatorCorrecaoAcumulado.multiply(fatorMes);
-            item.setIndiceCorrecao(fatorCorrecaoAcumulado);
+            // DATA DE INÍCIO DOS JUROS DA LINHA
+            YearMonth inicioJurosLinha =
+                    mesAtual.isAfter(mesCitacao)
+                            ? mesAtual
+                            : mesCitacao;
 
-            BigDecimal valorAtualizado = valorBase
-                    .multiply(fatorCorrecaoAcumulado)
-                    .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+            // ---- Correção monetária (fator acumulado) ----
+            BigDecimal fatorCorrecao =
+                    calcularFatorCorrecao(
+                            calculo.getTipoCorrecao(),
+                            mesAtual,
+                            mesFinal);
+
+            item.setIndiceCorrecao(fatorCorrecao);
+
+            BigDecimal valorAtualizado =
+                    valorBase
+                            .multiply(fatorCorrecao)
+                            .setScale(
+                                    ESCALA_FINAL,
+                                    RoundingMode.HALF_UP);
+
             item.setValorAtualizado(valorAtualizado);
 
+            // ---- Juros ----
             BigDecimal indiceJurosMes =
-                    buscarIndiceJuros(
+                    calcularJurosAcumulado(
                             calculo.getTipoJuros(),
-                            mesAtual);
+                            inicioJurosLinha,
+                            mesFinal);
 
             item.setIndiceJuros(indiceJurosMes);
 
-            BigDecimal valorJuros = valorAtualizado
-                    .multiply(
-                            indiceJurosMes.divide(
-                                    CEM,
-                                    ESCALA_INTERMEDIARIA,
-                                    RoundingMode.HALF_UP
-                            )
-                    )
-                    .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+            BigDecimal valorJuros =
+                    valorAtualizado
+                            .multiply(
+                                    indiceJurosMes.divide(
+                                            CEM,
+                                            ESCALA_INTERMEDIARIA,
+                                            RoundingMode.HALF_UP))
+                            .setScale(
+                                    ESCALA_FINAL,
+                                    RoundingMode.HALF_UP);
 
             item.setValorJuros(valorJuros);
 
@@ -122,29 +140,8 @@ public class CalculoService {
                 }
                 yield TipoIndice.IPCA_E;
             }
-            case TR_IPCAE_SELIC -> {
-                if (referencia.isBefore(marcoIpcae)) {
-                    yield TipoIndice.TR;
-                }
-                if (referencia.isBefore(marcoSelic)) {
-                    yield TipoIndice.IPCA_E;
-                }
-                yield TipoIndice.SELIC;
-            }
-            case TR_SELIC -> {
-                if (referencia.isBefore(marcoSelic)) {
-                    yield TipoIndice.TR;
-                }
-                yield TipoIndice.SELIC;
-            }
-            case IPCAE_SELIC -> {
-                if (referencia.isBefore(marcoSelic)) {
-                    yield TipoIndice.IPCA_E;
-                }
-                yield TipoIndice.SELIC;
-            }
             case TR -> TipoIndice.TR;
-            case IPCAE -> TipoIndice.IPCA_E;
+            case IPCA_E -> TipoIndice.IPCA_E;
             case SELIC -> TipoIndice.SELIC;
         };
     }
@@ -165,5 +162,124 @@ public class CalculoService {
                 throw new IllegalStateException(
                         "Tipo de juros inválido");
         }
+    }
+
+    private BigDecimal calcularJurosAcumulado(
+            TipoJuros tipoJuros,
+            YearMonth inicioJurosLinha,
+            YearMonth dataAtualizacao) {
+
+        BigDecimal acumulado = BigDecimal.ZERO;
+
+        YearMonth mes = inicioJurosLinha;
+
+        while (!mes.isAfter(dataAtualizacao)) {
+
+            acumulado = acumulado.add(
+                    buscarIndiceJuros(
+                            tipoJuros,
+                            mes));
+
+            mes = mes.plusMonths(1);
+        }
+
+        return acumulado;
+    }
+
+    private BigDecimal calcularFatorCorrecao(
+            TipoCorrecao tipoCorrecao,
+            YearMonth inicio,
+            YearMonth fim) {
+
+        switch (tipoCorrecao) {
+
+            case TR:
+                return calcularFatorIndice(
+                        TipoIndice.TR,
+                        inicio,
+                        fim);
+            case IPCA_E:
+                return calcularFatorIndice(
+                        TipoIndice.IPCA_E,
+                        inicio,
+                        fim);
+            case SELIC:
+                return calcularFatorIndice(
+                        TipoIndice.SELIC,
+                        inicio,
+                        fim);
+            case TR_IPCAE:
+                return calcularFatorTrIpcae(
+                        inicio,
+                        fim);
+            default:
+                throw new UnsupportedOperationException(
+                        "Tipo de correção não implementado");
+        }
+    }
+
+    private BigDecimal calcularFatorIndice(
+            TipoIndice tipoIndice,
+            YearMonth inicio,
+            YearMonth fim) {
+
+        BigDecimal fator = BigDecimal.ONE;
+
+        YearMonth mes = inicio;
+
+        while (!mes.isAfter(fim)) {
+
+            BigDecimal indice =
+                    indiceEconomicoRepository
+                            .findByTipoAndReferencia(
+                                    tipoIndice,
+                                    mes)
+                            .map(IndiceEconomico::getValor)
+                            .orElse(BigDecimal.ZERO);
+
+            BigDecimal fatorMes =
+                    BigDecimal.ONE.add(
+                            indice.divide(
+                                    CEM,
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP));
+
+            fator = fator.multiply(fatorMes);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return fator;
+    }
+
+    private BigDecimal calcularFatorTrIpcae(
+            YearMonth inicioParcela,
+            YearMonth dataAtualizacao) {
+
+        YearMonth marcoTR =
+                YearMonth.of(2015, 3);
+
+        // Se a parcela já nasceu após o fim da TR
+        if (inicioParcela.isAfter(marcoTR)) {
+
+            return calcularFatorIndice(
+                    TipoIndice.IPCA_E,
+                    inicioParcela,
+                    dataAtualizacao);
+        }
+
+        BigDecimal fatorTR =
+                calcularFatorIndice(
+                        TipoIndice.TR,
+                        inicioParcela,
+                        marcoTR);
+
+        BigDecimal fatorIPCAE =
+                calcularFatorIndice(
+                        TipoIndice.IPCA_E,
+                        YearMonth.of(2015, 4),
+                        dataAtualizacao);
+
+        return fatorTR.multiply(fatorIPCAE);
     }
 }

@@ -3,72 +3,176 @@
    ========================================== */
 
 .titulo-pagina {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
 }
 
 .titulo-pagina h2 {
     color: var(--azul-principal);
     font-weight: 700;
     margin-bottom: 0.3rem;
+    font-size: 1.6rem;
 }
 
 .titulo-pagina p {
     color: #6c757d;
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
 }
 
 /* ==========================================
-   CARD DOS DADOS DO PROCESSO
+   CARD: DADOS DO PROCESSO
    ========================================== */
 
 .card-processo {
     background: var(--branco);
     border: 1px solid var(--cinza-borda);
-    border-left: 5px solid var(--azul-principal);
-
-    border-radius: 8px;
-
-    padding: 1.5rem;
-
-    margin-bottom: 2rem;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(13, 43, 78, 0.06);
+    position: relative;
+    overflow: hidden;
 }
 
-.card-processo p {
-    margin-bottom: 0.65rem;
-    font-size: 0.95rem;
-}
-
-.card-processo strong {
-    color: var(--azul-principal);
-    min-width: 90px;
-    display: inline-block;
+.card-processo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--azul-principal) 0%, var(--azul-secundario) 100%);
 }
 
 /* ==========================================
-   CARD DOS DADOS DO PARÂMETROS
+   CARD: PARÂMETROS UTILIZADOS
    ========================================== */
 
 .card-parametros {
-    background: #f8fafc;
-
-    border-left: 5px solid var(--azul-principal);
-
-    border-radius: 8px;
-
-    padding: 1.2rem;
-
+    background: linear-gradient(135deg, var(--azul-principal) 0%, var(--azul-secundario) 100%);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
     margin-bottom: 2rem;
+    box-shadow: 0 4px 14px rgba(13, 43, 78, 0.18);
+    position: relative;
+    overflow: hidden;
+}
 
-    border: 1px solid var(--cinza-borda);
+
+/* Títulos dos cards */
+.card-processo h5,
+.card-parametros h5 {
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    width: 100%;
+}
+
+.card-processo h5 {
+    color: var(--azul-principal);
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--amarelo-destaque);
 }
 
 .card-parametros h5 {
-    color: var(--azul-principal);
+    color: var(--branco);
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+    width: 100%;
+}
+
+.card-processo h5 svg {
+    width: 19px;
+    height: 19px;
+    color: var(--amarelo-destaque);
+    flex-shrink: 0;
+}
+
+.card-parametros h5 svg {
+    width: 19px;
+    height: 19px;
+    color: var(--amarelo-destaque);
+    flex-shrink: 0;
+}
+
+/* ==========================================
+   GRID DE INFORMAÇÕES (genérico)
+   ========================================== */
+
+.grid-info {
+    display: grid;
+    gap: 1.4rem 1.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.grid-info-2 { grid-template-columns: repeat(3, 1fr); }
+.grid-info-3 { grid-template-columns: repeat(3, 1fr); }
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* Labels e valores — card claro (Processo) */
+.card-processo .label-info {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--azul-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.75;
+}
+
+.card-processo .valor-info {
+    font-size: 0.98rem;
+    color: var(--cinza-texto);
     font-weight: 600;
-    margin-bottom: 1rem;
+}
+
+/* Labels e valores — card escuro (Parâmetros) */
+.card-parametros .label-info {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--branco);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.65;
+}
+
+.card-parametros .valor-info {
+    font-size: 1rem;
+    color: var(--branco);
+    font-weight: 600;
+}
+
+/*
+.separador-periodo {
+    color: var(--amarelo-destaque);
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin: 0 0.5rem;
+    text-transform: uppercase;
+}
+*/
+
+/* Badge para correção/juros — destaca sobre o fundo azul escuro */
+.badge-parametro {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--branco);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: fit-content;
 }
 
 /* ==========================================
@@ -77,13 +181,9 @@
 
 .tabela-resultado {
     background: var(--branco);
-
-    border-radius: 8px;
-
+    border-radius: 10px;
     overflow: hidden;
-
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     margin-bottom: 1.5rem;
 }
 
@@ -99,8 +199,6 @@
     vertical-align: middle;
 }
 
-/* Valores monetários alinhados à direita */
-
 .valor {
     text-align: right;
     font-variant-numeric: tabular-nums;
@@ -111,27 +209,29 @@
    ========================================== */
 
 .resumo-calculo {
-    background: #f8fafc;
-
+    background: var(--azul-claro);
     border: 1px solid var(--cinza-borda);
-
-    border-radius: 8px;
-
-    padding: 1rem 1.5rem;
-
+    border-radius: 10px;
+    padding: 1.25rem 1.75rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .resumo-calculo h5 {
     color: var(--azul-principal);
-    margin-bottom: 0.8rem;
+    margin: 0;
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .total-geral {
-    font-size: 1.4rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 800;
     color: var(--azul-principal);
 }
 
@@ -142,7 +242,6 @@
 .acoes-resultado {
     display: flex;
     gap: 12px;
-
     margin-top: 1rem;
 }
 
@@ -154,10 +253,17 @@
    RESPONSIVIDADE
    ========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .grid-info-2,
+    .grid-info-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
-    .card-processo {
-        padding: 1rem;
+@media (max-width: 768px) {
+    .card-processo,
+    .card-parametros {
+        padding: 1.25rem 1.4rem;
     }
 
     .acoes-resultado {
@@ -166,5 +272,17 @@
 
     .acoes-resultado .btn {
         width: 100%;
+    }
+
+    .resumo-calculo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .grid-info-2,
+    .grid-info-3 {
+        grid-template-columns: 1fr;
     }
 }

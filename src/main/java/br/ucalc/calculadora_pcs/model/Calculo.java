@@ -1,6 +1,7 @@
 package br.ucalc.calculadora_pcs.model;
 
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
+import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -20,20 +21,21 @@ public class Calculo {
     @JoinColumn(name = "processo_id")
     private Processo processo;
 
-    private LocalDate dataInicioCorrecao;
-    private LocalDate dataFimCorrecao;
+    private LocalDate dataAtualizacao; // até onde atualizar
 
-    private LocalDate dataInicioJuros;
-    private LocalDate dataFimJuros;
+    private LocalDate dataCitacao; // início dos juros
 
-    private LocalDate competenciaInicial;
-    private LocalDate competenciaFinal;
+    private LocalDate dataParcela; // vencimento da parcela
 
     @Enumerated(EnumType.STRING)
     private TipoCorrecao tipoCorrecao;
 
     @Enumerated(EnumType.STRING)
     private TipoJuros tipoJuros;
+
+    // VERIFICAR PRÓXIMA ETAPA
+   // @Enumerated(EnumType.STRING)
+    //private TipoEmenda tipoEmenda;
 
     // Valor devido inicial informado pelo usuário (base de cálculo do 1º mês)
     private BigDecimal valorDevidoInicial;
@@ -50,46 +52,25 @@ public class Calculo {
     public Processo getProcesso() { return processo; }
     public void setProcesso(Processo processo) { this.processo = processo; }
 
-    public LocalDate getCompetenciaInicial() {
-        return competenciaInicial;
+    public LocalDate getDataAtualizacao() {
+        return dataAtualizacao;
     }
-    public void setCompetenciaInicial(LocalDate competenciaInicial) {
-        this.competenciaInicial = competenciaInicial;
-    }
-
-    public LocalDate getCompetenciaFinal() {
-        return competenciaFinal;
-    }
-    public void setCompetenciaFinal(LocalDate competenciaFinal) {
-        this.competenciaFinal = competenciaFinal;
+    public void setDataAtualizacao(LocalDate dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 
-    public LocalDate getDataInicioCorrecao() {
-        return dataInicioCorrecao;
+    public LocalDate getDataCitacao() {
+        return dataCitacao;
     }
-    public void setDataInicioCorrecao(LocalDate dataInicioCorrecao) {
-        this.dataInicioCorrecao = dataInicioCorrecao;
-    }
-
-    public LocalDate getDataFimCorrecao() {
-        return dataFimCorrecao;
-    }
-    public void setDataFimCorrecao(LocalDate dataFimCorrecao) {
-        this.dataFimCorrecao = dataFimCorrecao;
+    public void setDataCitacao(LocalDate dataCitacao) {
+        this.dataCitacao = dataCitacao;
     }
 
-    public LocalDate getDataInicioJuros() {
-        return dataInicioJuros;
+    public LocalDate getDataParcela() {
+        return dataParcela;
     }
-    public void setDataInicioJuros(LocalDate dataInicioJuros) {
-        this.dataInicioJuros = dataInicioJuros;
-    }
-
-    public LocalDate getDataFimJuros() {
-        return dataFimJuros;
-    }
-    public void setDataFimJuros(LocalDate dataFimJuros) {
-        this.dataFimJuros = dataFimJuros;
+    public void setDataParcela(LocalDate dataParcela) {
+        this.dataParcela = dataParcela;
     }
 
     public TipoCorrecao getTipoCorrecao() { return tipoCorrecao; }
@@ -97,6 +78,8 @@ public class Calculo {
 
     public TipoJuros getTipoJuros() { return tipoJuros; }
     public void setTipoJuros(TipoJuros tipoJuros) { this.tipoJuros = tipoJuros; }
+
+    //Colocar getters e setters NOVA EMENDAS
 
     public BigDecimal getValorDevidoInicial() { return valorDevidoInicial; }
     public void setValorDevidoInicial(BigDecimal valorDevidoInicial) { this.valorDevidoInicial = valorDevidoInicial; }

@@ -65,18 +65,9 @@ public class CalculoController {
         // Monta o Calculo
         Calculo calculo = new Calculo();
         calculo.setProcesso(processo);
-        calculo.setDataInicioCorrecao(
-                form.getDataInicioCorrecao());
-        calculo.setDataFimCorrecao(
-                form.getDataFimCorrecao());
-        calculo.setDataInicioJuros(
-                form.getDataInicioJuros());
-        calculo.setDataFimJuros(
-                form.getDataFimJuros());
-        calculo.setCompetenciaInicial(
-                form.getCompetenciaInicial());
-        calculo.setCompetenciaFinal(
-                form.getCompetenciaFinal());
+        calculo.setDataAtualizacao(form.getDataAtualizacao());
+        calculo.setDataCitacao(form.getDataCitacao());
+        calculo.setDataParcela(form.getDataParcela());
         calculo.setTipoCorrecao(form.getTipoCorrecao());
         calculo.setTipoJuros(form.getTipoJuros());
         calculo.setValorDevidoInicial(form.getValorDevidoInicial());

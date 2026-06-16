@@ -132,17 +132,13 @@
         <div class="card-secao">
             <h5>
                 <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="4" y="2" width="16" height="20" rx="2"/>
-                    <line x1="8" y1="7" x2="16" y2="7"/>
-                    <line x1="8" y1="11" x2="10" y2="11"/>
-                    <line x1="14" y1="11" x2="16" y2="11"/>
-                    <line x1="8" y1="15" x2="10" y2="15"/>
-                    <line x1="14" y1="15" x2="16" y2="15"/>
+                    <polyline points="3 17 9 11 13 15 21 6"/>
+                    <polyline points="15 6 21 6 21 12"/>
                 </svg>
                 Correção Monetária
             </h5>
 
-            <div class="grid grid-3">
+            <div class="grid grid-2">
 
                 <div class="campo">
                     <label class="form-label">
@@ -158,39 +154,63 @@
                         </option>
                     </select>
                 </div>
-                <div class="campo">
-                    <label class="form-label">
-                        Data Inicial
-                    </label>
 
-                    <input type="text"
-                           class="form-control mask-data"
-                           placeholder="dd/mm/aaaa"
-                           th:field="*{dataInicioCorrecao}">
-                </div>
                 <div class="campo">
                     <label class="form-label">
-                        Data Final
+                        Data Final da Atualização
                     </label>
                     <input type="text"
                            class="form-control mask-data"
                            placeholder="dd/mm/aaaa"
-                           th:field="*{dataFimCorrecao}">
+                           th:field="*{dataAtualizacao}">
                 </div>
             </div>
+
+            <div class="campo mt-4">
+
+                <label class="form-label fw-semibold">
+                    Regra Constitucional Aplicável
+                </label>
+
+                <div class="opcoes-emenda">
+
+                    <label class="opcao-chip">
+                        <input type="radio"
+                               th:field="*{tipoEmenda}"
+                               value="NENHUMA">
+                        <span>Nenhuma</span>
+                    </label>
+
+                    <label class="opcao-chip">
+                        <input type="radio"
+                               th:field="*{tipoEmenda}"
+                               value="EC113">
+                        <span>SELIC a partir de 12/2021 (EC 113/2021)</span>
+                    </label>
+
+                    <label class="opcao-chip">
+                        <input type="radio"
+                               th:field="*{tipoEmenda}"
+                               value="EC136">
+                        <span>IPCA + 2% a.a. a partir de 09/2025 (EC 136/2025)</span>
+                    </label>
+
+                </div>
+            </div>
+
         </div>
 
         <div class="card-secao">
             <h5>
                 <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="9"/>
-                    <line x1="12" y1="7" x2="12" y2="17"/>
-                    <path d="M9 10h6"/>
+                    <circle cx="12" cy="13" r="8"/>
+                    <polyline points="12 9 12 13 15 15"/>
+                    <path d="M9 2h6"/>
                 </svg>
                 Juros de Mora
             </h5>
 
-            <div class="grid grid-3">
+            <div class="grid grid-2">
 
                 <div class="campo">
                     <label class="form-label">
@@ -206,23 +226,15 @@
                         </option>
                     </select>
                 </div>
+
                 <div class="campo">
                     <label class="form-label">
-                        Data Inicial
+                        Data da Citação
                     </label>
                     <input type="text"
                            class="form-control mask-data"
                            placeholder="dd/mm/aaaa"
-                           th:field="*{dataInicioJuros}">
-                </div>
-                <div class="campo">
-                    <label class="form-label">
-                        Data Final
-                    </label>
-                    <input type="text"
-                           class="form-control mask-data"
-                           placeholder="dd/mm/aaaa"
-                           th:field="*{dataFimJuros}">
+                           th:field="*{dataCitacao}">
                 </div>
             </div>
         </div>
@@ -232,43 +244,31 @@
 
             <h5>
                 <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="16" rx="2"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                    <line x1="3" y1="16" x2="21" y2="16"/>
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
                 Dados da Parcela
             </h5>
 
-            <div class="grid grid-3">
+            <div class="grid grid-2">
 
                 <div class="campo">
                     <label class="form-label">
-                        Competência Inicial
+                        Data da Parcela
                     </label>
 
                     <input
                             type="text"
                             class="form-control mask-data"
                             placeholder="dd/mm/aaaa"
-                            th:field="*{competenciaInicial}">
-                </div>
-
-                <div class="campo">
-                    <label class="form-label">
-                        Competência Final
-                    </label>
-
-                    <input
-                            type="text"
-                            class="form-control mask-data"
-                            placeholder="dd/mm/aaaa"
-                            th:field="*{competenciaFinal}">
+                            th:field="*{dataParcela}">
                 </div>
 
                 <div class="campo">
                     <label class="form-label">
                         Valor da Parcela (R$)
                     </label>
+
                     <div class="input-prefixo">
                         <span>R$</span>
                         <input
@@ -277,8 +277,10 @@
                                 th:field="*{valorDevidoInicial}">
                     </div>
                 </div>
+
             </div>
         </div>
+
 
                     <!-- ================= AÇÕES ================= -->
         <div class="barra-acoes">
