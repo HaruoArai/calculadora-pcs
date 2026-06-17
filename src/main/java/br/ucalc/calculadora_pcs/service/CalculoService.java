@@ -244,7 +244,7 @@ public class CalculoService {
                                     ESCALA_INTERMEDIARIA,
                                     RoundingMode.HALF_UP));
 
-            fator = fator.multiply(fatorMes);
+            fator = fator.multiply(fatorMes).setScale(7, RoundingMode.HALF_UP);
 
             mes = mes.plusMonths(1);
         }

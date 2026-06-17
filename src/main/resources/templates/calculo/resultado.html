@@ -73,37 +73,36 @@
             </svg>
             Parâmetros Utilizados
         </h5>
-        <div class="grid-info grid-info-3">
+        <div class="grid-info grid-info-parametros">
+
             <div class="item-info item-info-destaque">
-                <span class="label-info">Período da Parcela</span>
+                <span class="label-info">Período da Correção</span>
                 <span class="valor-info">
                 <span th:text="${#temporals.format(calculo.dataParcela,'dd/MM/yyyy')}"></span>
                 <span class="separador-periodo">até</span>
                 <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
             </span>
             </div>
-            <div class="item-info item-info-destaque">
-                <span class="label-info">Data da Citação</span>
-                <span class="valor-info" th:text="${#temporals.format(calculo.dataCitacao,'dd/MM/yyyy')}"></span>
-            </div>
-            <div class="item-info"></div>
+
             <div class="item-info item-info-destaque">
                 <span class="label-info">Correção Monetária</span>
                 <span class="valor-info badge-parametro" th:text="${calculo.tipoCorrecao.descricao}"></span>
             </div>
+
             <div class="item-info item-info-destaque">
-                <span class="label-info">Juros</span>
+                <span class="label-info">Período do Juros</span>
+                <span class="valor-info">
+                <span th:text="${#temporals.format(calculo.dataCitacao,'dd/MM/yyyy')}"></span>
+                <span class="separador-periodo">até</span>
+                <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+            </span>
+            </div>
+
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Juros de Mora</span>
                 <span class="valor-info badge-parametro" th:text="${calculo.tipoJuros.descricao}"></span>
             </div>
-            <div class="item-info"></div>
-            <!--
-            <div class="item-info item-info-destaque">
-                <span class="label-info">Regra Constitucional</span>
-                <span class="valor-info badge-parametro"
-                      th:text="${calculo.tipoEmenda.descricao}">
-                </span>
-            </div>
-            -->
+
         </div>
     </div>
 
@@ -122,12 +121,12 @@
         <tbody>
         <tr th:each="item : ${calculo.itens}">
             <td th:text="${#temporals.format(item.data, 'MM/yyyy')}"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorDevido, 1, 2)}"></td>
-            <td th:text="${#numbers.formatDecimal(item.indiceCorrecao, 1, 6)}"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorAtualizado, 1, 2)}"></td>
-            <td th:text="${#numbers.formatDecimal(item.indiceJuros, 1, 6)}"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorJuros, 1, 2)}"></td>
-            <td th:text="${#numbers.formatDecimal(item.total, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorDevido, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.indiceCorrecao,1,'POINT',7,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorAtualizado, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.indiceJuros, 1, 2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorJuros, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.total, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
         </tbody>
     </table>

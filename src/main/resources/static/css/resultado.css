@@ -58,6 +58,18 @@
     overflow: hidden;
 }
 
+.grid-info-parametros {
+    grid-template-columns: max-content max-content;
+    gap: 1.4rem 2.0rem;
+    justify-content: start;
+}
+
+@media (max-width: 600px) {
+    .grid-info-parametros {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* Títulos dos cards */
 .card-processo h5,

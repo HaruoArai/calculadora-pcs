@@ -18,10 +18,13 @@ public class ItemCalculo {
 
     private LocalDate data;
 
-    private BigDecimal valorDevido;       // base de cálculo do mês
+    private BigDecimal valorDevido;
+
+    @Column(precision = 38, scale = 7) // base de cálculo do mês
     private BigDecimal indiceCorrecao;    // ex: índice IPCA-E do mês (em %)
     private BigDecimal valorAtualizado;   // valorDevido corrigido
 
+    @Column(precision = 38, scale = 7)
     private BigDecimal indiceJuros;       // ex: 0,5% ou rendimento da poupança
     private BigDecimal valorJuros;        // valor dos juros do mês
 
