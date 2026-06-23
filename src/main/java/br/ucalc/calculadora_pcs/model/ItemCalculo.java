@@ -28,6 +28,10 @@ public class ItemCalculo {
     private BigDecimal indiceJuros;       // ex: 0,5% ou rendimento da poupança
     private BigDecimal valorJuros;        // valor dos juros do mês
 
+    @Column(precision = 38, scale = 7)
+    private BigDecimal taxaSelic;
+    private BigDecimal valorSelic;
+
     private BigDecimal total;             // valorAtualizado + valorJuros
 
     public ItemCalculo() {}
@@ -56,6 +60,20 @@ public class ItemCalculo {
 
     public BigDecimal getValorJuros() { return valorJuros; }
     public void setValorJuros(BigDecimal valorJuros) { this.valorJuros = valorJuros; }
+
+    public BigDecimal getTaxaSelic() {
+        return taxaSelic;
+    }
+    public void setTaxaSelic(BigDecimal taxaSelic) {
+        this.taxaSelic = taxaSelic;
+    }
+
+    public BigDecimal getValorSelic() {
+        return valorSelic;
+    }
+    public void setValorSelic(BigDecimal valorSelic) {
+        this.valorSelic = valorSelic;
+    }
 
     public BigDecimal getTotal() { return total; }
     public void setTotal(BigDecimal total) { this.total = total; }

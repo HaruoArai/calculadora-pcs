@@ -187,6 +187,15 @@
     color: var(--azul-principal);
 }
 
+.opcao-desativada {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.opcao-desativada span {
+    cursor: not-allowed;
+}
+
 /* fw-semibold (classe do Bootstrap, garantindo o peso correto) */
 .fw-semibold {
     font-weight: 600;

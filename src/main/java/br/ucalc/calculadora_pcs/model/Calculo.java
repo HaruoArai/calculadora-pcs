@@ -33,9 +33,8 @@ public class Calculo {
     @Enumerated(EnumType.STRING)
     private TipoJuros tipoJuros;
 
-    // VERIFICAR PRÓXIMA ETAPA
-   // @Enumerated(EnumType.STRING)
-    //private TipoEmenda tipoEmenda;
+    @Enumerated(EnumType.STRING)
+    private TipoEmenda tipoEmenda;
 
     // Valor devido inicial informado pelo usuário (base de cálculo do 1º mês)
     private BigDecimal valorDevidoInicial;
@@ -79,7 +78,12 @@ public class Calculo {
     public TipoJuros getTipoJuros() { return tipoJuros; }
     public void setTipoJuros(TipoJuros tipoJuros) { this.tipoJuros = tipoJuros; }
 
-    //Colocar getters e setters NOVA EMENDAS
+    public TipoEmenda getTipoEmenda() {
+        return tipoEmenda;
+    }
+    public void setTipoEmenda(TipoEmenda tipoEmenda) {
+        this.tipoEmenda = tipoEmenda;
+    }
 
     public BigDecimal getValorDevidoInicial() { return valorDevidoInicial; }
     public void setValorDevidoInicial(BigDecimal valorDevidoInicial) { this.valorDevidoInicial = valorDevidoInicial; }

@@ -5,6 +5,7 @@ import br.ucalc.calculadora_pcs.model.Calculo;
 import br.ucalc.calculadora_pcs.model.ItemCalculo;
 import br.ucalc.calculadora_pcs.model.Processo;
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
+import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
 import br.ucalc.calculadora_pcs.repository.CalculoRepository;
 import br.ucalc.calculadora_pcs.repository.ProcessoRepository;
@@ -38,6 +39,7 @@ public class CalculoController {
         model.addAttribute("form", new CalculoFormDTO());
         model.addAttribute("tiposCorrecao", TipoCorrecao.values());
         model.addAttribute("tiposJuros", TipoJuros.values());
+        model.addAttribute("tiposEmenda", TipoEmenda.values());
         return "calculo/form";
     }
 
@@ -49,6 +51,7 @@ public class CalculoController {
         if (result.hasErrors()) {
             model.addAttribute("tiposCorrecao", TipoCorrecao.values());
             model.addAttribute("tiposJuros", TipoJuros.values());
+            model.addAttribute("tiposEmenda", TipoEmenda.values());
             return "calculo/form";
         }
 
@@ -70,6 +73,7 @@ public class CalculoController {
         calculo.setDataParcela(form.getDataParcela());
         calculo.setTipoCorrecao(form.getTipoCorrecao());
         calculo.setTipoJuros(form.getTipoJuros());
+        calculo.setTipoEmenda(form.getTipoEmenda());
         calculo.setValorDevidoInicial(form.getValorDevidoInicial());
 
         // Gera as linhas da tabela

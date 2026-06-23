@@ -1,6 +1,7 @@
 package br.ucalc.calculadora_pcs.service;
 
 import br.ucalc.calculadora_pcs.model.Calculo;
+import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.IndiceEconomico;
 import br.ucalc.calculadora_pcs.model.ItemCalculo;
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
@@ -35,6 +36,16 @@ public class CalculoService {
         YearMonth mesFinal =
                 YearMonth.from(calculo.getDataAtualizacao());
 
+        YearMonth mesFinalCorrecaoJuros = mesFinal;
+        YearMonth inicioSelic = null;
+
+        if (calculo.getTipoEmenda() == TipoEmenda.EC113) {
+
+            mesFinalCorrecaoJuros = YearMonth.of(2021, 11);
+
+            inicioSelic = YearMonth.of(2021, 12);
+        }
+
         YearMonth mesCitacao =
                 YearMonth.from(calculo.getDataCitacao());
 
@@ -62,7 +73,7 @@ public class CalculoService {
                     calcularFatorCorrecao(
                             calculo.getTipoCorrecao(),
                             mesAtual,
-                            mesFinal);
+                            mesFinalCorrecaoJuros);
 
             item.setIndiceCorrecao(fatorCorrecao);
 
@@ -80,7 +91,7 @@ public class CalculoService {
                     calcularJurosAcumulado(
                             calculo.getTipoJuros(),
                             inicioJurosLinha,
-                            mesFinal);
+                            mesFinalCorrecaoJuros);
 
             item.setIndiceJuros(indiceJurosMes);
 
@@ -97,8 +108,47 @@ public class CalculoService {
 
             item.setValorJuros(valorJuros);
 
+            // ---- SELIC EC 113/2021 ----
+            BigDecimal taxaSelic = BigDecimal.ZERO;
+            BigDecimal valorSelic = BigDecimal.ZERO;
+
+            if (calculo.getTipoEmenda() == TipoEmenda.EC113
+                    && inicioSelic != null
+                    && !inicioSelic.isAfter(mesFinal)) {
+
+                YearMonth inicioSelicLinha =
+                        mesAtual.isBefore(inicioSelic)
+                                ? inicioSelic
+                                : mesAtual;
+
+                taxaSelic =
+                        calcularSelicAcumulada(
+                                inicioSelicLinha,
+                                mesFinal);
+
+                BigDecimal baseSelic =
+                        valorAtualizado.add(valorJuros);
+
+                valorSelic =
+                        baseSelic
+                                .multiply(
+                                        taxaSelic.divide(
+                                                CEM,
+                                                ESCALA_INTERMEDIARIA,
+                                                RoundingMode.HALF_UP))
+                                .setScale(
+                                        ESCALA_FINAL,
+                                        RoundingMode.HALF_UP);
+            }
+
+            item.setTaxaSelic(taxaSelic);
+            item.setValorSelic(valorSelic);
+
             // ---- Total ----
-            item.setTotal(valorAtualizado.add(valorJuros));
+            item.setTotal(
+                    valorAtualizado
+                            .add(valorJuros)
+                            .add(valorSelic));
 
             itens.add(item);
             mesAtual = mesAtual.plusMonths(1);
@@ -147,17 +197,34 @@ public class CalculoService {
     }
 
     private BigDecimal buscarIndiceJuros(
-            br.ucalc.calculadora_pcs.model.enums.TipoJuros tipoJuros,
+            TipoJuros tipoJuros,
             YearMonth mes) {
 
+        YearMonth marcoPoupanca = YearMonth.of(2009, 8);
+
         switch (tipoJuros) {
+
             case SEM_JUROS:
                 return BigDecimal.ZERO;
+
             case MORA:
                 return BigDecimal.valueOf(0.5);
+
             case MORA_POUPANCA:
-                throw new UnsupportedOperationException(
-                        "MORA_POUPANCA ainda não implementado");
+
+                if (mes.isBefore(marcoPoupanca)) {
+                    return BigDecimal.valueOf(0.5);
+                }
+
+                return indiceEconomicoRepository
+                        .findByTipoAndReferencia(
+                                TipoIndice.POUPANCA,
+                                mes)
+                        .map(IndiceEconomico::getValor)
+                        .orElseThrow(() ->
+                                new IllegalStateException(
+                                        "Índice POUPANCA não cadastrado para " + mes));
+
             default:
                 throw new IllegalStateException(
                         "Tipo de juros inválido");
@@ -204,8 +271,7 @@ public class CalculoService {
                         inicio,
                         fim);
             case SELIC:
-                return calcularFatorIndice(
-                        TipoIndice.SELIC,
+                return calcularFatorSelicSimples(
                         inicio,
                         fim);
             case TR_IPCAE:
@@ -216,6 +282,41 @@ public class CalculoService {
                 throw new UnsupportedOperationException(
                         "Tipo de correção não implementado");
         }
+    }
+
+    private BigDecimal calcularFatorSelicSimples(
+            YearMonth inicio,
+            YearMonth fim) {
+
+        BigDecimal taxaAcumulada = BigDecimal.ZERO;
+
+        YearMonth mes = inicio;
+
+        while (!mes.isAfter(fim)) {
+
+            YearMonth mesReferencia = mes;
+
+            BigDecimal indice =
+                    indiceEconomicoRepository
+                            .findByTipoAndReferencia(
+                                    TipoIndice.SELIC,
+                                    mesReferencia)
+                            .map(IndiceEconomico::getValor)
+                            .orElseThrow(() ->
+                                    new IllegalStateException(
+                                            "Índice SELIC não cadastrado para " + mesReferencia));
+
+            taxaAcumulada = taxaAcumulada.add(indice);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return BigDecimal.ONE.add(
+                taxaAcumulada.divide(
+                        CEM,
+                        ESCALA_INTERMEDIARIA,
+                        RoundingMode.HALF_UP)
+        ).setScale(7, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calcularFatorIndice(
@@ -282,4 +383,36 @@ public class CalculoService {
 
         return fatorTR.multiply(fatorIPCAE);
     }
+
+    private BigDecimal calcularSelicAcumulada(
+            YearMonth inicio,
+            YearMonth fim) {
+
+        BigDecimal acumulado = BigDecimal.ZERO;
+
+        YearMonth mes = inicio;
+
+
+        while (!mes.isAfter(fim)) {
+
+            YearMonth mesReferencia = mes;
+
+            BigDecimal indiceSelic =
+                    indiceEconomicoRepository
+                            .findByTipoAndReferencia(
+                                    TipoIndice.SELIC,
+                                    mesReferencia)
+                            .map(IndiceEconomico::getValor)
+                            .orElseThrow(() ->
+                                    new IllegalStateException(
+                                            "Índice SELIC não cadastrado para " + mesReferencia));
+
+            acumulado = acumulado.add(indiceSelic);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return acumulado;
+    }
+
 }

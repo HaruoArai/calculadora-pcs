@@ -64,4 +64,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ---------- Regra EC113 x SELIC ----------
+    const tipoCorrecao = document.getElementById('tipoCorrecao');
+    const emendaEc113 = document.getElementById('emendaEc113');
+    const emendaNenhuma = document.getElementById('emendaNenhuma');
+
+    function atualizarEmendas() {
+
+        if (!tipoCorrecao || !emendaEc113 || !emendaNenhuma) {
+            return;
+        }
+
+        if (tipoCorrecao.value === 'SELIC') {
+
+            if (emendaEc113.checked) {
+                emendaNenhuma.checked = true;
+            }
+
+            emendaEc113.disabled = true;
+            emendaEc113.closest('.opcao-chip')
+                .classList.add('opcao-desativada');
+
+        } else {
+
+            emendaEc113.disabled = false;
+            emendaEc113.closest('.opcao-chip')
+                .classList.remove('opcao-desativada');
+        }
+    }
+
+    tipoCorrecao.addEventListener('change', atualizarEmendas);
+    atualizarEmendas();
+
 });

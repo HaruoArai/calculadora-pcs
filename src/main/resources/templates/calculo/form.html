@@ -69,65 +69,6 @@
             </div>
         </div>
 
-        <!-- ================= DADOS DO CÁLCULO =================
-        <div class="card-secao">
-            <h5>
-                <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="4" y="2" width="16" height="20" rx="2"/>
-                    <line x1="8" y1="7" x2="16" y2="7"/>
-                    <line x1="8" y1="11" x2="10" y2="11"/>
-                    <line x1="14" y1="11" x2="16" y2="11"/>
-                    <line x1="8" y1="15" x2="10" y2="15"/>
-                    <line x1="14" y1="15" x2="16" y2="15"/>
-                </svg>
-                Dados do Cálculo
-            </h5>
-
-            <div class="grid grid-3">
-                <div class="campo">
-                    <label class="form-label">Competência inicial</label>
-                    <input type="text" class="form-control mask-data" placeholder="dd/mm/aaaa"
-                           th:field="*{competenciaInicial}" inputmode="numeric" maxlength="10">
-                    <span class="text-danger" th:if="${#fields.hasErrors('competenciaInicial')}" th:errors="*{competenciaInicial}"></span>
-                </div>
-                <div class="campo">
-                    <label class="form-label">Competência final</label>
-                    <input type="text" class="form-control mask-data" placeholder="dd/mm/aaaa"
-                           th:field="*{competenciaFinal}" inputmode="numeric" maxlength="10">
-                    <span class="text-danger" th:if="${#fields.hasErrors('competenciaFinal')}" th:errors="*{competenciaFinal}"></span>
-                </div>
-                <div class="campo">
-                    <label class="form-label">Valor devido (R$)</label>
-                    <div class="input-prefixo">
-                        <span>R$</span>
-                        <input type="text" class="form-control mask-moeda" placeholder="0,00"
-                               th:field="*{valorDevidoInicial}" inputmode="decimal">
-                    </div>
-                    <span class="text-danger" th:if="${#fields.hasErrors('valorDevidoInicial')}" th:errors="*{valorDevidoInicial}"></span>
-                </div>
-            </div>
-
-            <div class="grid grid-2">
-                <div class="campo">
-                    <label class="form-label">Correção monetária</label>
-                    <select class="form-select" th:field="*{tipoCorrecao}">
-                        <option value="">Selecione</option>
-                        <option th:each="tipo : ${tiposCorrecao}" th:value="${tipo}" th:text="${tipo.descricao}"></option>
-                    </select>
-                    <span class="text-danger" th:if="${#fields.hasErrors('tipoCorrecao')}" th:errors="*{tipoCorrecao}"></span>
-                </div>
-                <div class="campo">
-                    <label class="form-label">Juros de mora</label>
-                    <select class="form-select" th:field="*{tipoJuros}">
-                        <option value="">Selecione</option>
-                        <option th:each="tipo : ${tiposJuros}" th:value="${tipo}" th:text="${tipo.descricao}"></option>
-                    </select>
-                    <span class="text-danger" th:if="${#fields.hasErrors('tipoJuros')}" th:errors="*{tipoJuros}"></span>
-                </div>
-            </div>
-        </div>
-        -->
-
         <!-- ================= CORREÇÃO MONETÁRIA E JUROS ================= -->
         <div class="card-secao">
             <h5>
@@ -146,7 +87,8 @@
                     </label>
 
                     <select class="form-select"
-                            th:field="*{tipoCorrecao}">
+                            th:field="*{tipoCorrecao}"
+                            id="tipoCorrecao">
                         <option value="">Selecione</option>
                         <option th:each="tipo : ${tiposCorrecao}"
                                 th:value="${tipo}"
@@ -177,6 +119,7 @@
                     <label class="opcao-chip">
                         <input type="radio"
                                th:field="*{tipoEmenda}"
+                               id="emendaNenhuma"
                                value="NENHUMA">
                         <span>Nenhuma</span>
                     </label>
@@ -184,6 +127,7 @@
                     <label class="opcao-chip">
                         <input type="radio"
                                th:field="*{tipoEmenda}"
+                               id="emendaEc113"
                                value="EC113">
                         <span>SELIC a partir de 12/2021 (EC 113/2021)</span>
                     </label>

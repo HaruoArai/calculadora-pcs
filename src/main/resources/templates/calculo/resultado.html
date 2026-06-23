@@ -80,7 +80,11 @@
                 <span class="valor-info">
                 <span th:text="${#temporals.format(calculo.dataParcela,'dd/MM/yyyy')}"></span>
                 <span class="separador-periodo">até</span>
-                <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() == 'NENHUMA'}"
+                      th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() != 'NENHUMA'}">
+                    08/12/2021
+                </span>
             </span>
             </div>
 
@@ -94,13 +98,41 @@
                 <span class="valor-info">
                 <span th:text="${#temporals.format(calculo.dataCitacao,'dd/MM/yyyy')}"></span>
                 <span class="separador-periodo">até</span>
-                <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() == 'NENHUMA'}"
+                      th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() != 'NENHUMA'}">
+                    08/12/2021
+                </span>
             </span>
             </div>
 
             <div class="item-info item-info-destaque">
                 <span class="label-info">Juros de Mora</span>
                 <span class="valor-info badge-parametro" th:text="${calculo.tipoJuros.descricao}"></span>
+            </div>
+
+            <!-- NOVO BLOCO -->
+            <div class="item-info item-info-destaque"
+                 th:if="${calculo.tipoEmenda != null and calculo.tipoEmenda.name() != 'NENHUMA'}">
+
+                <span class="label-info">Período da Regra Constitucional</span>
+
+                <span class="valor-info">
+                    09/12/2021
+                    <span class="separador-periodo">até</span>
+                    <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                </span>
+
+            </div>
+
+            <div class="item-info item-info-destaque"
+                 th:if="${calculo.tipoEmenda != null and calculo.tipoEmenda.name() != 'NENHUMA'}">
+
+                <span class="label-info">Regra Constitucional</span>
+
+                <span class="valor-info badge-parametro"
+                      th:text="${calculo.tipoEmenda.descricao}">
+                </span>
             </div>
 
         </div>
@@ -115,6 +147,12 @@
             <th>Valor atualizado</th>
             <th>Taxa de juros</th>
             <th>Valor dos juros</th>
+            <th th:if="${calculo.tipoEmenda.name() == 'EC113'}">
+                Taxa Selic
+            </th>
+            <th th:if="${calculo.tipoEmenda.name() == 'EC113'}">
+                Valor da Selic
+            </th>
             <th>Total</th>
         </tr>
         </thead>
@@ -126,6 +164,12 @@
             <td th:text="${#numbers.formatDecimal(item.valorAtualizado, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="|${#numbers.formatDecimal(item.indiceJuros, 1, 2)}%|"></td>
             <td th:text="${#numbers.formatDecimal(item.valorJuros, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113'}"
+                th:text="|${#numbers.formatDecimal(item.taxaSelic, 1, 2)}%|">
+            </td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113'}"
+                th:text="${#numbers.formatDecimal(item.valorSelic, 1, 'POINT', 2, 'COMMA')}">
+            </td>
             <td th:text="${#numbers.formatDecimal(item.total, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
         </tbody>
