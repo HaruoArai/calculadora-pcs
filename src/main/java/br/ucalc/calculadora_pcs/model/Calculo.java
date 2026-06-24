@@ -42,6 +42,9 @@ public class Calculo {
     @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemCalculo> itens = new ArrayList<>();
 
+    @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParcelaCalculo> parcelas = new ArrayList<>();
+
     public Calculo() {}
 
     // Getters e Setters
@@ -90,4 +93,11 @@ public class Calculo {
 
     public List<ItemCalculo> getItens() { return itens; }
     public void setItens(List<ItemCalculo> itens) { this.itens = itens; }
+
+    public List<ParcelaCalculo> getParcelas() {
+        return parcelas;
+    }
+    public void setParcelas(List<ParcelaCalculo> parcelas) {
+        this.parcelas = parcelas;
+    }
 }

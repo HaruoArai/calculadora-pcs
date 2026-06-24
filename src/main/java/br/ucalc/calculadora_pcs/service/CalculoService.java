@@ -10,10 +10,11 @@ import br.ucalc.calculadora_pcs.repository.IndiceEconomicoRepository;
 import org.springframework.stereotype.Service;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
 
+import br.ucalc.calculadora_pcs.dto.ParcelaFormDTO;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,10 @@ public class CalculoService {
         this.indiceEconomicoRepository = indiceEconomicoRepository;
     }
 
-    public List<ItemCalculo> gerarTabela(Calculo calculo) {
-        YearMonth mesInicial =
-                YearMonth.from(calculo.getDataParcela());
+    public List<ItemCalculo> gerarTabela(
+            Calculo calculo,
+            List<ParcelaFormDTO> parcelas) {
+
         YearMonth mesFinal =
                 YearMonth.from(calculo.getDataAtualizacao());
 
@@ -49,13 +51,17 @@ public class CalculoService {
         YearMonth mesCitacao =
                 YearMonth.from(calculo.getDataCitacao());
 
-        BigDecimal valorBase = calculo.getValorDevidoInicial();
-
         List<ItemCalculo> itens = new ArrayList<>();
 
+        for (ParcelaFormDTO parcela : parcelas) {
 
-        YearMonth mesAtual = mesInicial;
-        while (!mesAtual.isAfter(mesFinal)) {
+            YearMonth mesInicial =
+                    YearMonth.from(parcela.getDataParcela());
+
+            BigDecimal valorBase =
+                    parcela.getValorParcela();
+
+            YearMonth mesAtual = mesInicial;
 
             ItemCalculo item = new ItemCalculo();
             item.setCalculo(calculo);
@@ -151,7 +157,6 @@ public class CalculoService {
                             .add(valorSelic));
 
             itens.add(item);
-            mesAtual = mesAtual.plusMonths(1);
         }
 
         return itens;

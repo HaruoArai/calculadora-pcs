@@ -2,14 +2,16 @@ package br.ucalc.calculadora_pcs.dto;
 
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CalculoFormDTO {
 
@@ -34,19 +36,14 @@ public class CalculoFormDTO {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCitacao;
 
-    @NotNull(message = "Informe a data da parcela")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataParcela;
+    @Valid
+    private List<ParcelaFormDTO> parcelas = new ArrayList<>();
 
     @NotNull(message = "Selecione o tipo de correção")
     private TipoCorrecao tipoCorrecao;
 
     @NotNull(message = "Selecione o tipo de juros")
     private TipoJuros tipoJuros;
-
-    @NotNull(message = "Informe o valor devido")
-    @DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")
-    private BigDecimal valorDevidoInicial;
 
     // Getters e Setters
     public String getAutor() { return autor; }
@@ -88,11 +85,11 @@ public class CalculoFormDTO {
         this.dataCitacao = dataCitacao;
     }
 
-    public LocalDate getDataParcela() {
-        return dataParcela;
+    public List<ParcelaFormDTO> getParcelas() {
+        return parcelas;
     }
-    public void setDataParcela(LocalDate dataParcela) {
-        this.dataParcela = dataParcela;
+    public void setParcelas(List<ParcelaFormDTO> parcelas) {
+        this.parcelas = parcelas;
     }
 
     public TipoCorrecao getTipoCorrecao() { return tipoCorrecao; }
@@ -101,6 +98,4 @@ public class CalculoFormDTO {
     public TipoJuros getTipoJuros() { return tipoJuros; }
     public void setTipoJuros(TipoJuros tipoJuros) { this.tipoJuros = tipoJuros; }
 
-    public BigDecimal getValorDevidoInicial() { return valorDevidoInicial; }
-    public void setValorDevidoInicial(BigDecimal valorDevidoInicial) { this.valorDevidoInicial = valorDevidoInicial; }
 }

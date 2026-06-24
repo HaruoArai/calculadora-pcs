@@ -191,35 +191,66 @@
                     <line x1="12" y1="1" x2="12" y2="23"/>
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
-                Dados da Parcela
+                Dados das Parcelas
             </h5>
 
-            <div class="grid grid-2">
+            <div id="parcelas-container">
 
-                <div class="campo">
-                    <label class="form-label">
-                        Data da Parcela
-                    </label>
+                <div class="linha-parcela grid grid-3"
+                     th:each="parcela, stat : *{parcelas}"
+                     th:data-index="${stat.index}">
 
-                    <input
-                            type="text"
-                            class="form-control mask-data"
-                            placeholder="dd/mm/aaaa"
-                            th:field="*{dataParcela}">
-                </div>
+                    <div class="campo">
+                        <label class="form-label">
+                            Data da Parcela
+                        </label>
 
-                <div class="campo">
-                    <label class="form-label">
-                        Valor da Parcela (R$)
-                    </label>
+                        <input type="text"
+                               class="form-control mask-data data-parcela"
+                               placeholder="dd/mm/aaaa"
+                               th:field="*{parcelas[__${stat.index}__].dataParcela}">
 
-                    <div class="input-prefixo">
-                        <span>R$</span>
-                        <input
-                                type="text"
-                                class="form-control mask-moeda"
-                                th:field="*{valorDevidoInicial}">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('parcelas[' + stat.index + '].dataParcela')}"
+                              th:errors="*{parcelas[__${stat.index}__].dataParcela}">
+                        </span>
                     </div>
+
+                    <div class="campo">
+                        <label class="form-label">
+                            Valor da Parcela (R$)
+                        </label>
+
+                        <div class="input-prefixo">
+                            <span>R$</span>
+                            <input type="text"
+                                   class="form-control mask-moeda valor-parcela"
+                                   th:field="*{parcelas[__${stat.index}__].valorParcela}">
+                        </div>
+
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('parcelas[' + stat.index + '].valorParcela')}"
+                              th:errors="*{parcelas[__${stat.index}__].valorParcela}">
+                        </span>
+                    </div>
+
+                    <div class="campo campo-botao-parcela">
+                        <label class="form-label">&nbsp;</label>
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                id="btn-adicionar-parcela"
+                                th:if="${stat.index == 0}">
+                            +
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-secondary btn-remover-parcela"
+                                th:if="${stat.index > 0}">
+                            Excluir
+                        </button>
+                    </div>
+
                 </div>
 
             </div>

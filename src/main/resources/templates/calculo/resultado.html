@@ -175,7 +175,15 @@
         </tbody>
     </table>
 
-    <a th:href="@{/calculo/novo}" class="btn btn-secondary">Novo cálculo</a>
+    <div class="acoes-resultado">
+        <a th:href="@{/calculo/novo}" class="btn btn-secondary">
+            Novo cálculo
+        </a>
+
+        <a th:href="@{/calculo/editar/{id}(id=${calculo.id})}" class="btn btn-primary">
+            Editar cálculo
+        </a>
+    </div>
 </div>
 
 <footer class="rodape-sistema">
