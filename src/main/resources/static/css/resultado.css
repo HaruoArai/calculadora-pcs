@@ -247,6 +247,16 @@
     color: var(--azul-principal);
 }
 
+.linha-total {
+    font-weight: 700;
+    background-color: #f1f4f8;
+    border-top: 2px solid var(--azul-principal);
+}
+
+.linha-total td {
+    vertical-align: middle;
+}
+
 /* ==========================================
    BOTÕES
    ========================================== */

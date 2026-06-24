@@ -172,6 +172,51 @@
             </td>
             <td th:text="${#numbers.formatDecimal(item.total, 1, 'POINT', 2, 'COMMA')}"></td>
         </tr>
+
+        <tr class="linha-total">
+            <td><strong>Total</strong></td>
+
+            <td>
+                <strong th:text="${#numbers.formatDecimal(
+            #aggregates.sum(calculo.itens.![valorDevido]),
+            1, 'POINT', 2, 'COMMA')}">
+                </strong>
+            </td>
+
+            <td></td>
+
+            <td>
+                <strong th:text="${#numbers.formatDecimal(
+            #aggregates.sum(calculo.itens.![valorAtualizado]),
+            1, 'POINT', 2, 'COMMA')}">
+                </strong>
+            </td>
+
+            <td></td>
+
+            <td>
+                <strong th:text="${#numbers.formatDecimal(
+            #aggregates.sum(calculo.itens.![valorJuros]),
+            1, 'POINT', 2, 'COMMA')}">
+                </strong>
+            </td>
+
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113'}"></td>
+
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113'}">
+                <strong th:text="${#numbers.formatDecimal(
+            #aggregates.sum(calculo.itens.![valorSelic]),
+            1, 'POINT', 2, 'COMMA')}">
+                </strong>
+            </td>
+
+            <td>
+                <strong th:text="${#numbers.formatDecimal(
+            #aggregates.sum(calculo.itens.![total]),
+            1, 'POINT', 2, 'COMMA')}">
+                </strong>
+            </td>
+        </tr>
         </tbody>
     </table>
 
