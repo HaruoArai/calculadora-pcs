@@ -247,14 +247,31 @@
     color: var(--azul-principal);
 }
 
-.linha-total {
-    font-weight: 700;
-    background-color: #f1f4f8;
-    border-top: 2px solid var(--azul-principal);
-}
+/* ==========================================
+   LINHA TOTAL
+   ========================================== */
 
 .linha-total td {
+    background-color: var(--azul-claro) !important;
+    color: var(--azul-principal) !important;
+    font-weight: 700;
+    font-size: 0.92rem;
     vertical-align: middle;
+    padding: 0.75rem;
+    border-top: 2px solid var(--cinza-borda) !important;
+    border-color: var(--cinza-borda) !important;
+}
+
+.linha-total td:first-child {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--azul-secundario) !important;
+}
+
+.linha-total td strong {
+    color: var(--azul-principal) !important;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================
