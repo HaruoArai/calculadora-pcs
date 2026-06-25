@@ -15,6 +15,7 @@ import br.ucalc.calculadora_pcs.dto.ParcelaFormDTO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,28 +37,34 @@ public class CalculoService {
             Calculo calculo,
             List<ParcelaFormDTO> parcelas) {
 
-        YearMonth mesFinal =
-                YearMonth.from(calculo.getDataAtualizacao());
+        LocalDate dataFinal =
+                calculo.getDataAtualizacao();
 
-        YearMonth mesFinalCorrecaoJuros = mesFinal;
-        YearMonth inicioSelic = null;
+        YearMonth mesFinal =
+                YearMonth.from(dataFinal);
+
+        LocalDate dataFinalCorrecaoJuros = dataFinal;
+        LocalDate dataInicioSelic = null;
 
         if (calculo.getTipoEmenda() == TipoEmenda.EC113) {
 
-            mesFinalCorrecaoJuros = YearMonth.of(2021, 11);
+            dataFinalCorrecaoJuros = LocalDate.of(2021, 12, 8);
 
-            inicioSelic = YearMonth.of(2021, 12);
+            dataInicioSelic = LocalDate.of(2021, 12, 9);
         }
 
-        YearMonth mesCitacao =
-                YearMonth.from(calculo.getDataCitacao());
+        LocalDate dataCitacao =
+                calculo.getDataCitacao();
 
         List<ItemCalculo> itens = new ArrayList<>();
 
         for (ParcelaFormDTO parcela : parcelas) {
 
+            LocalDate dataParcela =
+                    parcela.getDataParcela();
+
             YearMonth mesInicial =
-                    YearMonth.from(parcela.getDataParcela());
+                    YearMonth.from(dataParcela);
 
             BigDecimal valorBase =
                     parcela.getValorParcela();
@@ -66,24 +73,24 @@ public class CalculoService {
 
             ItemCalculo item = new ItemCalculo();
             item.setCalculo(calculo);
-            item.setData(mesAtual.atDay(1)); // 1º dia do mês de referência
+            item.setData(dataParcela); // Assim o resultado mostra a data real da parcela, como 15/01/2025, e não sempre o dia 1
             item.setValorDevido(valorBase);
 
             // DATA DE INÍCIO DOS JUROS DA LINHA
-            YearMonth inicioJurosLinha;
+            LocalDate inicioJurosLinha;
 
             switch (calculo.getTipoRegraJuros()) {
 
                 case CONGELADO_CITACAO:
-                    inicioJurosLinha = mesCitacao;
+                    inicioJurosLinha = dataCitacao;
                     break;
 
                 case ACOMPANHA_PARCELA:
                 default:
                     inicioJurosLinha =
-                            mesAtual.isAfter(mesCitacao)
-                                    ? mesAtual
-                                    : mesCitacao;
+                            dataParcela.isAfter(dataCitacao)
+                                    ? dataParcela
+                                    : dataCitacao;
                     break;
             }
 
@@ -91,8 +98,8 @@ public class CalculoService {
             BigDecimal fatorCorrecao =
                     calcularFatorCorrecao(
                             calculo.getTipoCorrecao(),
-                            mesAtual,
-                            mesFinalCorrecaoJuros);
+                            dataParcela,
+                            dataFinalCorrecaoJuros);
 
             item.setIndiceCorrecao(fatorCorrecao);
 
@@ -110,7 +117,7 @@ public class CalculoService {
                     calcularJurosAcumulado(
                             calculo.getTipoJuros(),
                             inicioJurosLinha,
-                            mesFinalCorrecaoJuros);
+                            dataFinalCorrecaoJuros);
 
             item.setIndiceJuros(indiceJurosMes);
 
@@ -132,18 +139,18 @@ public class CalculoService {
             BigDecimal valorSelic = BigDecimal.ZERO;
 
             if (calculo.getTipoEmenda() == TipoEmenda.EC113
-                    && inicioSelic != null
-                    && !inicioSelic.isAfter(mesFinal)) {
+                    && dataInicioSelic != null
+                    && !dataInicioSelic.isAfter(dataFinal)) {
 
-                YearMonth inicioSelicLinha =
-                        mesAtual.isBefore(inicioSelic)
-                                ? inicioSelic
-                                : mesAtual;
+                LocalDate inicioSelicLinha =
+                        dataParcela.isBefore(dataInicioSelic)
+                                ? dataInicioSelic
+                                : dataParcela;
 
                 taxaSelic =
                         calcularSelicAcumulada(
                                 inicioSelicLinha,
-                                mesFinal);
+                                dataFinal);
 
                 BigDecimal baseSelic =
                         valorAtualizado.add(valorJuros);
@@ -251,30 +258,35 @@ public class CalculoService {
 
     private BigDecimal calcularJurosAcumulado(
             TipoJuros tipoJuros,
-            YearMonth inicioJurosLinha,
-            YearMonth dataAtualizacao) {
+            LocalDate inicio,
+            LocalDate fim) {
 
-        BigDecimal acumulado = BigDecimal.ZERO;
+        switch (tipoJuros) {
 
-        YearMonth mes = inicioJurosLinha;
+            case SEM_JUROS:
+                return BigDecimal.ZERO;
 
-        while (!mes.isAfter(dataAtualizacao)) {
+            case MORA:
+                return calcularJurosPorIndice(
+                        TipoJuros.MORA,
+                        inicio,
+                        fim);
 
-            acumulado = acumulado.add(
-                    buscarIndiceJuros(
-                            tipoJuros,
-                            mes));
+            case MORA_POUPANCA:
+                return calcularJurosMoraPoupanca(
+                        inicio,
+                        fim);
 
-            mes = mes.plusMonths(1);
+            default:
+                throw new IllegalStateException(
+                        "Tipo de juros inválido");
         }
-
-        return acumulado;
     }
 
     private BigDecimal calcularFatorCorrecao(
             TipoCorrecao tipoCorrecao,
-            YearMonth inicio,
-            YearMonth fim) {
+            LocalDate inicio,
+            LocalDate fim) {
 
         switch (tipoCorrecao) {
 
@@ -303,14 +315,17 @@ public class CalculoService {
     }
 
     private BigDecimal calcularFatorSelicSimples(
-            YearMonth inicio,
-            YearMonth fim) {
+            LocalDate inicio,
+            LocalDate fim) {
 
         BigDecimal taxaAcumulada = BigDecimal.ZERO;
 
-        YearMonth mes = inicio;
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
 
-        while (!mes.isAfter(fim)) {
+        while (!mes.isAfter(mesFim)) {
+
+            int dias = diasProRata30(inicio, fim, mes);
 
             YearMonth mesReferencia = mes;
 
@@ -324,7 +339,14 @@ public class CalculoService {
                                     new IllegalStateException(
                                             "Índice SELIC não cadastrado para " + mesReferencia));
 
-            taxaAcumulada = taxaAcumulada.add(indice);
+            BigDecimal indiceProRata =
+                    indice
+                            .divide(BigDecimal.valueOf(30),
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(dias));
+
+            taxaAcumulada = taxaAcumulada.add(indiceProRata);
 
             mes = mes.plusMonths(1);
         }
@@ -339,14 +361,17 @@ public class CalculoService {
 
     private BigDecimal calcularFatorIndice(
             TipoIndice tipoIndice,
-            YearMonth inicio,
-            YearMonth fim) {
+            LocalDate inicio,
+            LocalDate fim) {
 
         BigDecimal fator = BigDecimal.ONE;
 
-        YearMonth mes = inicio;
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
 
-        while (!mes.isAfter(fim)) {
+        while (!mes.isAfter(mesFim)) {
+
+            int dias = diasProRata30(inicio, fim, mes);
 
             BigDecimal indice =
                     indiceEconomicoRepository
@@ -356,9 +381,14 @@ public class CalculoService {
                             .map(IndiceEconomico::getValor)
                             .orElse(BigDecimal.ZERO);
 
+            BigDecimal indiceProRata =
+                    indice
+                            .divide(BigDecimal.valueOf(30), ESCALA_INTERMEDIARIA, RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(dias));
+
             BigDecimal fatorMes =
                     BigDecimal.ONE.add(
-                            indice.divide(
+                            indiceProRata.divide(
                                     CEM,
                                     ESCALA_INTERMEDIARIA,
                                     RoundingMode.HALF_UP));
@@ -372,15 +402,17 @@ public class CalculoService {
     }
 
     private BigDecimal calcularFatorTrIpcae(
-            YearMonth inicioParcela,
-            YearMonth dataAtualizacao) {
+            LocalDate inicioParcela,
+            LocalDate dataAtualizacao) {
 
-        YearMonth marcoTR =
-                YearMonth.of(2015, 3);
+        LocalDate fimTR =
+                LocalDate.of(2015, 3, 30);
+
+        LocalDate inicioIPCAE =
+                LocalDate.of(2015, 4, 1);
 
         // Se a parcela já nasceu após o fim da TR
-        if (inicioParcela.isAfter(marcoTR)) {
-
+        if (inicioParcela.isAfter(fimTR)) {
             return calcularFatorIndice(
                     TipoIndice.IPCA_E,
                     inicioParcela,
@@ -391,27 +423,29 @@ public class CalculoService {
                 calcularFatorIndice(
                         TipoIndice.TR,
                         inicioParcela,
-                        marcoTR);
+                        fimTR);
 
         BigDecimal fatorIPCAE =
                 calcularFatorIndice(
                         TipoIndice.IPCA_E,
-                        YearMonth.of(2015, 4),
+                        inicioIPCAE,
                         dataAtualizacao);
 
-        return fatorTR.multiply(fatorIPCAE);
+        return fatorTR.multiply(fatorIPCAE).setScale(7, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calcularSelicAcumulada(
-            YearMonth inicio,
-            YearMonth fim) {
+            LocalDate inicio,
+            LocalDate fim) {
 
         BigDecimal acumulado = BigDecimal.ZERO;
 
-        YearMonth mes = inicio;
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
 
+        while (!mes.isAfter(mesFim)) {
 
-        while (!mes.isAfter(fim)) {
+            int dias = diasProRata30(inicio, fim, mes);
 
             YearMonth mesReferencia = mes;
 
@@ -425,7 +459,178 @@ public class CalculoService {
                                     new IllegalStateException(
                                             "Índice SELIC não cadastrado para " + mesReferencia));
 
-            acumulado = acumulado.add(indiceSelic);
+            BigDecimal indiceProRata =
+                    indiceSelic
+                            .divide(BigDecimal.valueOf(30),
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(dias));
+
+            acumulado = acumulado.add(indiceProRata);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return acumulado;
+    }
+
+    private int diasProRata30(
+            LocalDate inicio,
+            LocalDate fim,
+            YearMonth mes) {
+
+        YearMonth mesInicio = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
+
+        int diaInicio = diaBase30(inicio);
+        int diaFim = diaBase30(fim);
+
+        if (mes.equals(mesInicio) && mes.equals(mesFim)) {
+            return diaFim - diaInicio + 1;
+        }
+
+        if (mes.equals(mesInicio)) {
+            return 30 - diaInicio + 1;
+        }
+
+        if (mes.equals(mesFim)) {
+            return diaFim;
+        }
+
+        return 30;
+    }
+
+    private int diaBase30(LocalDate data) {
+        boolean ultimoDiaFevereiro =
+                data.getMonthValue() == 2
+                        && data.getDayOfMonth() == data.lengthOfMonth();
+
+        if (ultimoDiaFevereiro) {
+            return 30;
+        }
+
+        return Math.min(data.getDayOfMonth(), 30);
+    }
+
+    private BigDecimal calcularJurosPorIndice(
+            TipoJuros tipoJuros,
+            LocalDate inicio,
+            LocalDate fim) {
+
+        BigDecimal acumulado = BigDecimal.ZERO;
+
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
+
+        while (!mes.isAfter(mesFim)) {
+
+            int dias =
+                    diasProRata30(
+                            inicio,
+                            fim,
+                            mes);
+
+            BigDecimal indiceMes =
+                    buscarIndiceJuros(
+                            tipoJuros,
+                            mes);
+
+            BigDecimal indiceProRata =
+                    indiceMes
+                            .divide(
+                                    BigDecimal.valueOf(30),
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP)
+                            .multiply(
+                                    BigDecimal.valueOf(dias));
+
+            acumulado =
+                    acumulado.add(indiceProRata);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return acumulado;
+    }
+
+    private BigDecimal calcularJurosMoraPoupanca(
+            LocalDate inicio,
+            LocalDate fim) {
+
+        LocalDate fimMora =
+                LocalDate.of(2009, 7, 31);
+
+        LocalDate inicioPoupanca =
+                LocalDate.of(2009, 8, 1);
+
+        if (fim.isBefore(inicioPoupanca)) {
+            return calcularJurosPorIndice(
+                    TipoJuros.MORA,
+                    inicio,
+                    fim);
+        }
+
+        if (inicio.isAfter(fimMora)) {
+            return calcularJurosPoupanca(
+                    inicio,
+                    fim);
+        }
+
+        BigDecimal jurosMora =
+                calcularJurosPorIndice(
+                        TipoJuros.MORA,
+                        inicio,
+                        fimMora);
+
+        BigDecimal jurosPoupanca =
+                calcularJurosPoupanca(
+                        inicioPoupanca,
+                        fim);
+
+        return jurosMora.add(jurosPoupanca);
+    }
+
+    private BigDecimal calcularJurosPoupanca(
+            LocalDate inicio,
+            LocalDate fim) {
+
+        BigDecimal acumulado = BigDecimal.ZERO;
+
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
+
+        while (!mes.isAfter(mesFim)) {
+
+            int dias =
+                    diasProRata30(
+                            inicio,
+                            fim,
+                            mes);
+
+            YearMonth mesReferencia = mes;
+
+            BigDecimal indiceMes =
+                    indiceEconomicoRepository
+                            .findByTipoAndReferencia(
+                                    TipoIndice.POUPANCA,
+                                    mesReferencia)
+                            .map(IndiceEconomico::getValor)
+                            .orElseThrow(() ->
+                                    new IllegalStateException(
+                                            "Índice POUPANCA não cadastrado para "
+                                                    + mesReferencia));
+
+            BigDecimal indiceProRata =
+                    indiceMes
+                            .divide(
+                                    BigDecimal.valueOf(30),
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP)
+                            .multiply(
+                                    BigDecimal.valueOf(dias));
+
+            acumulado =
+                    acumulado.add(indiceProRata);
 
             mes = mes.plusMonths(1);
         }

@@ -262,3 +262,63 @@
 .tooltip.bs-tooltip-bottom .tooltip-arrow::before {
     border-bottom-color: var(--azul-principal);
 }
+
+/* ==========================================
+   BOTÕES DE PARCELA (adicionar / remover)
+   ========================================== */
+
+.btn-adicionar,
+.btn-remover {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-adicionar svg,
+.btn-remover svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* Adicionar — verde discreto */
+.btn-adicionar {
+    background-color: #e6f4ea;
+    color: #2e7d32;
+}
+
+.btn-adicionar:hover {
+    background-color: #c8e6c9;
+    color: #1b5e20;
+    transform: scale(1.08);
+}
+
+/* Remover — vermelho discreto */
+.btn-remover {
+    background-color: #fdecea;
+    color: #c62828;
+}
+
+.btn-remover:hover {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+    transform: scale(1.08);
+}
+/* ==========================================
+   LINHA DE PARCELA
+   ========================================== */
+
+.linha-parcela {
+    grid-template-columns: 1fr 1fr auto !important;
+    align-items: end;
+}
+
+.campo-botao-parcela {
+    width: 38px;
+}

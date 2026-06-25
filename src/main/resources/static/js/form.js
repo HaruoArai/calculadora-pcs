@@ -180,35 +180,43 @@ document.addEventListener('DOMContentLoaded', () => {
         linha.dataset.index = index;
 
         linha.innerHTML = `
-        <div class="campo">
-            <label class="form-label">Data da Parcela</label>
-            <input type="text"
-                   class="form-control mask-data data-parcela"
-                   placeholder="dd/mm/aaaa"
-                   name="parcelas[${index}].dataParcela"
-                   id="parcelas${index}.dataParcela"
-                   value="${dataSugerida}">
-        </div>
-
-        <div class="campo">
-            <label class="form-label">Valor da Parcela (R$)</label>
-            <div class="input-prefixo">
-                <span>R$</span>
+            <div class="campo">
+                <label class="form-label">Data da Parcela</label>
                 <input type="text"
-                       class="form-control mask-moeda valor-parcela"
-                       name="parcelas[${index}].valorParcela"
-                       id="parcelas${index}.valorParcela"
-                       value="${valorSugerido}">
+                       class="form-control mask-data data-parcela"
+                       placeholder="dd/mm/aaaa"
+                       name="parcelas[${index}].dataParcela"
+                       id="parcelas${index}.dataParcela"
+                       value="${dataSugerida}">
             </div>
-        </div>
-
-        <div class="campo campo-botao-parcela">
-            <label class="form-label">&nbsp;</label>
-            <button type="button" class="btn btn-secondary btn-remover-parcela">
-                Excluir
-            </button>
-        </div>
-    `;
+        
+            <div class="campo">
+                <label class="form-label">Valor da Parcela (R$)</label>
+                <div class="input-prefixo">
+                    <span>R$</span>
+                    <input type="text"
+                           class="form-control mask-moeda valor-parcela"
+                           name="parcelas[${index}].valorParcela"
+                           id="parcelas${index}.valorParcela"
+                           value="${valorSugerido}">
+                </div>
+            </div>
+        
+            <div class="campo campo-botao-parcela">
+                <label class="form-label">&nbsp;</label>
+                <button type="button"
+                        class="btn btn-remover btn-remover-parcela"
+                        title="Remover parcela">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M10 11v6"/>
+                        <path d="M14 11v6"/>
+                        <path d="M9 6V4h6v2"/>
+                    </svg>
+                </button>
+            </div>
+        `;
 
         parcelasContainer.appendChild(linha);
 
@@ -229,16 +237,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         parcelasContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-remover-parcela')) {
-                const linhas = parcelasContainer.querySelectorAll('.linha-parcela');
+            const botao = e.target.closest('.btn-remover-parcela');
 
-                if (linhas.length <= 1) {
-                    return;
-                }
+            if (!botao) return;
 
-                e.target.closest('.linha-parcela').remove();
-                reindexarParcelas();
-            }
+            const linhas = parcelasContainer.querySelectorAll('.linha-parcela');
+
+            if (linhas.length <= 1) return;
+
+            botao.closest('.linha-parcela').remove();
+            reindexarParcelas();
         });
     }
     // ---------- Bootstrap Tooltips ----------
