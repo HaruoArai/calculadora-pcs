@@ -6,6 +6,7 @@ import br.ucalc.calculadora_pcs.model.IndiceEconomico;
 import br.ucalc.calculadora_pcs.model.ItemCalculo;
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
 import br.ucalc.calculadora_pcs.model.enums.TipoIndice;
+import br.ucalc.calculadora_pcs.model.enums.TipoRegraJuros;
 import br.ucalc.calculadora_pcs.repository.IndiceEconomicoRepository;
 import org.springframework.stereotype.Service;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
@@ -69,10 +70,22 @@ public class CalculoService {
             item.setValorDevido(valorBase);
 
             // DATA DE INÍCIO DOS JUROS DA LINHA
-            YearMonth inicioJurosLinha =
-                    mesAtual.isAfter(mesCitacao)
-                            ? mesAtual
-                            : mesCitacao;
+            YearMonth inicioJurosLinha;
+
+            switch (calculo.getTipoRegraJuros()) {
+
+                case CONGELADO_CITACAO:
+                    inicioJurosLinha = mesCitacao;
+                    break;
+
+                case ACOMPANHA_PARCELA:
+                default:
+                    inicioJurosLinha =
+                            mesAtual.isAfter(mesCitacao)
+                                    ? mesAtual
+                                    : mesCitacao;
+                    break;
+            }
 
             // ---- Correção monetária (fator acumulado) ----
             BigDecimal fatorCorrecao =

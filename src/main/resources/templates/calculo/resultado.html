@@ -93,6 +93,9 @@
                 <span class="valor-info badge-parametro" th:text="${calculo.tipoCorrecao.descricao}"></span>
             </div>
 
+            <!-- Bloco vazio -->
+            <div class="item-info item-info-destaque"></div>
+
             <div class="item-info item-info-destaque">
                 <span class="label-info">Período do Juros</span>
                 <span class="valor-info">
@@ -109,6 +112,13 @@
             <div class="item-info item-info-destaque">
                 <span class="label-info">Juros de Mora</span>
                 <span class="valor-info badge-parametro" th:text="${calculo.tipoJuros.descricao}"></span>
+            </div>
+
+            <div class="item-info item-info-destaque">
+                <span class="label-info">Contagem dos Juros</span>
+                <span class="valor-info badge-parametro"
+                  th:text="${calculo.tipoRegraJuros.descricao}">
+                </span>
             </div>
 
             <!-- NOVO BLOCO -->

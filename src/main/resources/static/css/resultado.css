@@ -59,8 +59,9 @@
 }
 
 .grid-info-parametros {
-    grid-template-columns: max-content max-content;
-    gap: 1.4rem 2.0rem;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: 1.4rem 2rem;
     justify-content: start;
 }
 

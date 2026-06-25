@@ -3,6 +3,7 @@ package br.ucalc.calculadora_pcs.model;
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
 import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
+import br.ucalc.calculadora_pcs.model.enums.TipoRegraJuros;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,6 +33,9 @@ public class Calculo {
 
     @Enumerated(EnumType.STRING)
     private TipoJuros tipoJuros;
+
+    @Enumerated(EnumType.STRING)
+    private TipoRegraJuros tipoRegraJuros;
 
     @Enumerated(EnumType.STRING)
     private TipoEmenda tipoEmenda;
@@ -80,6 +84,13 @@ public class Calculo {
 
     public TipoJuros getTipoJuros() { return tipoJuros; }
     public void setTipoJuros(TipoJuros tipoJuros) { this.tipoJuros = tipoJuros; }
+
+    public TipoRegraJuros getTipoRegraJuros() {
+        return tipoRegraJuros;
+    }
+    public void setTipoRegraJuros(TipoRegraJuros tipoRegraJuros) {
+        this.tipoRegraJuros = tipoRegraJuros;
+    }
 
     public TipoEmenda getTipoEmenda() {
         return tipoEmenda;

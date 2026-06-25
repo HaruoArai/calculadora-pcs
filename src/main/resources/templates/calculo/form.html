@@ -112,6 +112,18 @@
 
                 <label class="form-label fw-semibold">
                     Regra Constitucional Aplicável
+                    <span
+                        class="ms-1 icone-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-html="true"
+                        data-bs-placement="right"
+                        title="<b>EC 113/2021</b><br>• Aplica Taxa Selic de 09/12/2021 até a data final.<br><br><b>EC 136/2025</b><br>• Aplica Taxa Selic de 09/12/2021 até 09/09/2025.<br>• A partir de 10/09/2025 aplica IPCA + 2% ao ano até a data final.">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="8" stroke-width="3"/>
+                            <line x1="12" y1="12" x2="12" y2="17"/>
+                        </svg>
+                    </span>
                 </label>
 
                 <div class="opcoes-emenda">
@@ -129,14 +141,14 @@
                                th:field="*{tipoEmenda}"
                                id="emendaEc113"
                                value="EC113">
-                        <span>SELIC a partir de 12/2021 (EC 113/2021)</span>
+                        <span>EC 113/2021</span>
                     </label>
 
                     <label class="opcao-chip">
                         <input type="radio"
                                th:field="*{tipoEmenda}"
                                value="EC136">
-                        <span>IPCA + 2% a.a. a partir de 09/2025 (EC 136/2025)</span>
+                        <span>EC 136/2025</span>
                     </label>
 
                 </div>
@@ -179,6 +191,48 @@
                            class="form-control mask-data"
                            placeholder="dd/mm/aaaa"
                            th:field="*{dataCitacao}">
+                </div>
+            </div>
+
+            <div class="campo mt-4">
+
+                <label class="form-label fw-semibold">
+                    Forma de Aplicação dos Juros
+                    <span
+                        class="ms-1 icone-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-html="true"
+                        data-bs-placement="right"
+                        title="<b>Período variável</b><br>O período dos juros acompanha a data de cada parcela. Para parcelas posteriores à citação, o período de juros diminui.<br><br><b>Período fixo</b><br>O período dos juros é sempre contado desde a data da citação, independentemente da data da parcela.">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="8" stroke-width="3"/>
+                            <line x1="12" y1="12" x2="12" y2="17"/>
+                        </svg>
+                    </span>
+                </label>
+
+                <div class="opcoes-emenda">
+
+                    <label class="opcao-chip">
+                        <input type="radio"
+                               th:field="*{tipoRegraJuros}"
+                               value="ACOMPANHA_PARCELA">
+
+                        <span>
+                            Período variável
+                        </span>
+                    </label>
+
+                    <label class="opcao-chip">
+                        <input type="radio"
+                               th:field="*{tipoRegraJuros}"
+                               value="CONGELADO_CITACAO">
+
+                        <span>
+                            Período fixo
+                        </span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -272,6 +326,7 @@
     <span>© 2026 Sistema de Cálculos Judiciais • PGE-MS • PCS • UCALC</span>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/form.js}"></script>
 </body>
 </html>

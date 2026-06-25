@@ -200,3 +200,65 @@
 .fw-semibold {
     font-weight: 600;
 }
+
+/* ==========================================
+   ÍCONES DE INFORMAÇÕES
+   ========================================== */
+
+.icone-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    color: var(--azul-secundario);
+    margin-bottom: 2px;
+}
+
+.icone-info svg {
+    width: 18px;
+    height: 18px;
+}
+
+.icone-info:hover {
+    opacity: 1;
+    transform: scale(1.15);
+    color: var(--azul-principal);
+}
+
+/* ==========================================
+   TOOLTIP PERSONALIZADO
+   ========================================== */
+
+.tooltip-inner {
+    text-align: left !important;
+    max-width: 280px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+.tooltip .tooltip-inner {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: var(--azul-principal);
+}
+
+.tooltip.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: var(--azul-principal);
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--azul-principal);
+}
+
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: var(--azul-principal);
+}

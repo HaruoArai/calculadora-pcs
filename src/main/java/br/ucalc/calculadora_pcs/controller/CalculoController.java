@@ -8,6 +8,7 @@ import br.ucalc.calculadora_pcs.model.Processo;
 import br.ucalc.calculadora_pcs.model.enums.TipoCorrecao;
 import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
+import br.ucalc.calculadora_pcs.model.enums.TipoRegraJuros;
 import br.ucalc.calculadora_pcs.model.ParcelaCalculo;
 import br.ucalc.calculadora_pcs.repository.CalculoRepository;
 import br.ucalc.calculadora_pcs.repository.ProcessoRepository;
@@ -43,6 +44,7 @@ public class CalculoController {
         model.addAttribute("form", form);
         model.addAttribute("tiposCorrecao", TipoCorrecao.values());
         model.addAttribute("tiposJuros", TipoJuros.values());
+        model.addAttribute("tiposRegraJuros", TipoRegraJuros.values());
         model.addAttribute("tiposEmenda", TipoEmenda.values());
         return "calculo/form";
     }
@@ -55,6 +57,7 @@ public class CalculoController {
         if (result.hasErrors()) {
             model.addAttribute("tiposCorrecao", TipoCorrecao.values());
             model.addAttribute("tiposJuros", TipoJuros.values());
+            model.addAttribute("tiposRegraJuros", TipoRegraJuros.values());
             model.addAttribute("tiposEmenda", TipoEmenda.values());
             return "calculo/form";
         }
@@ -77,6 +80,7 @@ public class CalculoController {
 
         calculo.setTipoCorrecao(form.getTipoCorrecao());
         calculo.setTipoJuros(form.getTipoJuros());
+        calculo.setTipoRegraJuros(form.getTipoRegraJuros());
         calculo.setTipoEmenda(form.getTipoEmenda());
 
         // Mantém a primeira parcela no cálculo apenas para referência
@@ -131,6 +135,7 @@ public class CalculoController {
         form.setDataCitacao(calculo.getDataCitacao());
         form.setTipoCorrecao(calculo.getTipoCorrecao());
         form.setTipoJuros(calculo.getTipoJuros());
+        form.setTipoRegraJuros(calculo.getTipoRegraJuros());
         form.setTipoEmenda(calculo.getTipoEmenda());
 
         form.getParcelas().clear();
@@ -146,6 +151,7 @@ public class CalculoController {
         model.addAttribute("form", form);
         model.addAttribute("tiposCorrecao", TipoCorrecao.values());
         model.addAttribute("tiposJuros", TipoJuros.values());
+        model.addAttribute("tiposRegraJuros", TipoRegraJuros.values());
         model.addAttribute("tiposEmenda", TipoEmenda.values());
 
         return "calculo/form";
