@@ -50,10 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let valor = input.value.trim();
 
         // Se vier do Spring como 5000.00
-        if (valor.includes('.') && !valor.includes(',')) {
+        if (!valor.includes(',')) {
+
             const numero = Number(valor);
 
             if (!isNaN(numero)) {
+
                 input.value = numero.toLocaleString('pt-BR', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
@@ -172,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function criarLinhaParcela(dataSugerida = '', valorSugerido = '') {
+    function criarLinhaParcela(dataSugerida = '', valorSugerido = '0,00') {
         const index = parcelasContainer.querySelectorAll('.linha-parcela').length;
 
         const linha = document.createElement('div');
@@ -181,7 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         linha.innerHTML = `
             <div class="campo">
-                <label class="form-label">Data da Parcela</label>
+                <label class="form-label" style="visibility:hidden">
+                    Data da Parcela
+                </label>
                 <input type="text"
                        class="form-control mask-data data-parcela"
                        placeholder="dd/mm/aaaa"
@@ -191,7 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         
             <div class="campo">
-                <label class="form-label">Valor da Parcela (R$)</label>
+                <label class="form-label" style="visibility:hidden">
+                    Valor da Parcela (R$)
+                </label>
                 <div class="input-prefixo">
                     <span>R$</span>
                     <input type="text"
@@ -203,7 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         
             <div class="campo campo-botao-parcela">
-                <label class="form-label">&nbsp;</label>
+                <label class="form-label" style="visibility:hidden">
+                    &nbsp;
+                </label>
                 <button type="button"
                         class="btn btn-remover btn-remover-parcela"
                         title="Remover parcela">
@@ -232,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const novaData = somarUmMes(ultimaData);
 
-            criarLinhaParcela(novaData, '');
+            criarLinhaParcela(novaData, '0,00');
             reindexarParcelas();
         });
 

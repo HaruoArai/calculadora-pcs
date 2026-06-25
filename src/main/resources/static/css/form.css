@@ -316,7 +316,20 @@
 
 .linha-parcela {
     grid-template-columns: 1fr 1fr auto !important;
-    align-items: end;
+    align-items: start;
+    margin-bottom: 0.35rem;
+    row-gap: 0.25rem;
+}
+
+.linha-parcela .campo {
+    margin-bottom: 0;
+}
+
+.linha-parcela .text-danger {
+    display: block;
+    min-height: 20px;
+    margin-top: 4px;
+    font-size: 0.85rem;
 }
 
 .campo-botao-parcela {

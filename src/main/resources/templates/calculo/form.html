@@ -95,6 +95,11 @@
                                 th:text="${tipo.descricao}">
                         </option>
                     </select>
+
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('tipoCorrecao')}"
+                          th:errors="*{tipoCorrecao}">
+                    </span>
                 </div>
 
                 <div class="campo">
@@ -105,6 +110,11 @@
                            class="form-control mask-data"
                            placeholder="dd/mm/aaaa"
                            th:field="*{dataAtualizacao}">
+
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('dataAtualizacao')}"
+                          th:errors="*{dataAtualizacao}">
+                    </span>
                 </div>
             </div>
 
@@ -181,6 +191,10 @@
                                 th:text="${tipo.descricao}">
                         </option>
                     </select>
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('tipoJuros')}"
+                          th:errors="*{tipoJuros}">
+                    </span>
                 </div>
 
                 <div class="campo">
@@ -191,6 +205,11 @@
                            class="form-control mask-data"
                            placeholder="dd/mm/aaaa"
                            th:field="*{dataCitacao}">
+
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('dataCitacao')}"
+                          th:errors="*{dataCitacao}">
+                    </span>
                 </div>
             </div>
 
@@ -255,7 +274,8 @@
                      th:data-index="${stat.index}">
 
                     <div class="campo">
-                        <label class="form-label">
+                        <label class="form-label"
+                               th:style="${stat.index > 0} ? 'visibility:hidden' : ''">
                             Data da Parcela
                         </label>
 
@@ -271,7 +291,8 @@
                     </div>
 
                     <div class="campo">
-                        <label class="form-label">
+                        <label class="form-label"
+                               th:style="${stat.index > 0} ? 'visibility:hidden' : ''">
                             Valor da Parcela (R$)
                         </label>
 
@@ -289,7 +310,10 @@
                     </div>
 
                     <div class="campo campo-botao-parcela">
-                        <label class="form-label">&nbsp;</label>
+                        <label class="form-label"
+                               th:style="${stat.index > 0} ? 'visibility:hidden' : ''">
+                            &nbsp;
+                        </label>
 
                         <button type="button"
                                 class="btn btn-adicionar"
