@@ -101,31 +101,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const emendaEc113 = document.getElementById('emendaEc113');
     const emendaNenhuma = document.getElementById('emendaNenhuma');
 
+    // ---------- Bloqueia emendas conforme data final ----------
+    const dataAtualizacao = document.getElementById('dataAtualizacao');
+    const emendaEc136 = document.getElementById('emendaEc136');
+
     function atualizarEmendas() {
 
-        if (!tipoCorrecao || !emendaEc113 || !emendaNenhuma) {
+        if (!tipoCorrecao || !emendaEc113 || !emendaEc136 || !emendaNenhuma || !dataAtualizacao) {
             return;
         }
 
-        if (tipoCorrecao.value === 'SELIC') {
+        const data = converterDataBR(dataAtualizacao.value);
+        const marcoEc113 = new Date(2021, 11, 9); // 09/12/2021
 
-            if (emendaEc113.checked) {
-                emendaNenhuma.checked = true;
+        const dataAnteriorEmenda =
+            data && data < marcoEc113;
+
+        const correcaoSelic =
+            tipoCorrecao.value === 'SELIC';
+
+        function configurarEmenda(emenda, bloquear, mensagem) {
+            const chip = emenda.closest('.opcao-chip');
+
+            if (bloquear) {
+                if (emenda.checked) {
+                    emendaNenhuma.checked = true;
+                }
+
+                emenda.disabled = true;
+                chip.classList.add('opcao-desativada');
+                chip.setAttribute('title', mensagem);
+
+            } else {
+                emenda.disabled = false;
+                chip.classList.remove('opcao-desativada');
+                chip.removeAttribute('title');
             }
-
-            emendaEc113.disabled = true;
-            emendaEc113.closest('.opcao-chip')
-                .classList.add('opcao-desativada');
-
-        } else {
-
-            emendaEc113.disabled = false;
-            emendaEc113.closest('.opcao-chip')
-                .classList.remove('opcao-desativada');
         }
+
+        configurarEmenda(
+            emendaEc113,
+            dataAnteriorEmenda || correcaoSelic,
+            correcaoSelic
+                ? 'A EC 113/2021 não pode ser combinada com a correção SELIC.'
+                : 'Regra constitucional disponível apenas para atualizações a partir de 09/12/2021.'
+        );
+
+        configurarEmenda(
+            emendaEc136,
+            dataAnteriorEmenda,
+            'Regra constitucional disponível apenas para atualizações a partir de 09/12/2021.'
+        );
+    }
+
+    function converterDataBR(dataTexto) {
+        const partes = dataTexto.split('/');
+
+        if (partes.length !== 3) {
+            return null;
+        }
+
+        const dia = parseInt(partes[0], 10);
+        const mes = parseInt(partes[1], 10) - 1;
+        const ano = parseInt(partes[2], 10);
+
+        if (isNaN(dia) || isNaN(mes) || isNaN(ano)) {
+            return null;
+        }
+
+        return new Date(ano, mes, dia);
     }
 
     tipoCorrecao.addEventListener('change', atualizarEmendas);
+
+    if (dataAtualizacao) {
+        dataAtualizacao.addEventListener('input', atualizarEmendas);
+        dataAtualizacao.addEventListener('change', atualizarEmendas);
+    }
+
     atualizarEmendas();
 
     // ---------- Parcelas dinâmicas ----------
@@ -304,5 +357,4 @@ document.addEventListener('DOMContentLoaded', () => {
         tipoJuros.addEventListener('change', atualizarCamposJuros);
         atualizarCamposJuros();
     }
-
 });
