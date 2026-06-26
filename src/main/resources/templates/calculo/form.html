@@ -184,7 +184,8 @@
                     </label>
 
                     <select class="form-select"
-                            th:field="*{tipoJuros}">
+                            th:field="*{tipoJuros}"
+                            id="tipoJuros">
                         <option value="">Selecione</option>
                         <option th:each="tipo : ${tiposJuros}"
                                 th:value="${tipo}"
@@ -203,6 +204,7 @@
                     </label>
                     <input type="text"
                            class="form-control mask-data"
+                           id="dataCitacao"
                            placeholder="dd/mm/aaaa"
                            th:field="*{dataCitacao}">
 
@@ -210,10 +212,14 @@
                           th:if="${#fields.hasErrors('dataCitacao')}"
                           th:errors="*{dataCitacao}">
                     </span>
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('dataCitacaoValida')}"
+                          th:errors="*{dataCitacaoValida}">
+                    </span>
                 </div>
             </div>
 
-            <div class="campo mt-4">
+            <div class="campo mt-4" id="blocoRegraJuros">
 
                 <label class="form-label fw-semibold">
                     Forma de Aplicação dos Juros

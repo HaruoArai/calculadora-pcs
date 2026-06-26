@@ -263,4 +263,46 @@ document.addEventListener('DOMContentLoaded', () => {
         new bootstrap.Tooltip(el, { boundary: 'window' });
     });
 
+    // ---------- Bloqueia citação e regra quando for SEM_JUROS ----------
+    const tipoJuros = document.getElementById('tipoJuros');
+    const dataCitacao = document.getElementById('dataCitacao');
+    const blocoRegraJuros = document.getElementById('blocoRegraJuros');
+
+    function atualizarCamposJuros() {
+        if (!tipoJuros || !dataCitacao || !blocoRegraJuros) {
+            return;
+        }
+
+        const semJuros = tipoJuros.value === 'SEM_JUROS';
+
+        dataCitacao.disabled = semJuros;
+
+        if (semJuros) {
+            dataCitacao.value = '';
+            blocoRegraJuros.classList.add('opcao-desativada');
+
+            blocoRegraJuros
+                .querySelectorAll('input')
+                .forEach(input => input.disabled = true);
+        } else {
+            blocoRegraJuros.classList.remove('opcao-desativada');
+
+            blocoRegraJuros
+                .querySelectorAll('input')
+                .forEach(input => input.disabled = false);
+
+            const algumMarcado = blocoRegraJuros.querySelector('input:checked');
+
+            if (!algumMarcado) {
+                const padrao = blocoRegraJuros.querySelector('input[value="ACOMPANHA_PARCELA"]');
+                if (padrao) padrao.checked = true;
+            }
+        }
+    }
+
+    if (tipoJuros) {
+        tipoJuros.addEventListener('change', atualizarCamposJuros);
+        atualizarCamposJuros();
+    }
+
 });

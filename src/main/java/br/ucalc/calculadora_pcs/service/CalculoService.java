@@ -56,6 +56,9 @@ public class CalculoService {
         LocalDate dataCitacao =
                 calculo.getDataCitacao();
 
+        boolean semJuros =
+                calculo.getTipoJuros() == TipoJuros.SEM_JUROS;
+
         List<ItemCalculo> itens = new ArrayList<>();
 
         for (ParcelaFormDTO parcela : parcelas) {
@@ -77,21 +80,23 @@ public class CalculoService {
             item.setValorDevido(valorBase);
 
             // DATA DE INÍCIO DOS JUROS DA LINHA
-            LocalDate inicioJurosLinha;
+            LocalDate inicioJurosLinha = null;
 
-            switch (calculo.getTipoRegraJuros()) {
+            if (!semJuros && dataCitacao != null) {
+                switch (calculo.getTipoRegraJuros()) {
 
-                case CONGELADO_CITACAO:
-                    inicioJurosLinha = dataCitacao;
-                    break;
+                    case CONGELADO_CITACAO:
+                        inicioJurosLinha = dataCitacao;
+                        break;
 
-                case ACOMPANHA_PARCELA:
-                default:
-                    inicioJurosLinha =
-                            dataParcela.isAfter(dataCitacao)
-                                    ? dataParcela
-                                    : dataCitacao;
-                    break;
+                    case ACOMPANHA_PARCELA:
+                    default:
+                        inicioJurosLinha =
+                                dataParcela.isAfter(dataCitacao)
+                                        ? dataParcela
+                                        : dataCitacao;
+                        break;
+                }
             }
 
             // ---- Correção monetária (fator acumulado) ----
@@ -114,7 +119,9 @@ public class CalculoService {
 
             // ---- Juros ----
             BigDecimal indiceJurosMes =
-                    calcularJurosAcumulado(
+                    (semJuros || inicioJurosLinha == null)
+                            ? BigDecimal.ZERO
+                            : calcularJurosAcumulado(
                             calculo.getTipoJuros(),
                             inicioJurosLinha,
                             dataFinalCorrecaoJuros);
@@ -261,6 +268,10 @@ public class CalculoService {
             LocalDate inicio,
             LocalDate fim) {
 
+        if (inicio.isAfter(fim)) {
+            return BigDecimal.ZERO;
+        }
+
         switch (tipoJuros) {
 
             case SEM_JUROS:
@@ -287,6 +298,10 @@ public class CalculoService {
             TipoCorrecao tipoCorrecao,
             LocalDate inicio,
             LocalDate fim) {
+
+        if (inicio.isAfter(fim)) {
+            return BigDecimal.ONE;
+        }
 
         switch (tipoCorrecao) {
 
@@ -406,10 +421,10 @@ public class CalculoService {
             LocalDate dataAtualizacao) {
 
         LocalDate fimTR =
-                LocalDate.of(2015, 3, 30);
+                LocalDate.of(2015, 3, 25);
 
         LocalDate inicioIPCAE =
-                LocalDate.of(2015, 4, 1);
+                LocalDate.of(2015, 3, 26);
 
         // Se a parcela já nasceu após o fim da TR
         if (inicioParcela.isAfter(fimTR)) {

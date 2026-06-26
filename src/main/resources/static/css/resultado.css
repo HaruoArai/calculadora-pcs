@@ -60,9 +60,35 @@
 
 .grid-info-parametros {
     display: grid;
-    grid-template-columns: repeat(3, max-content);
-    gap: 1.4rem 2rem;
+    grid-template-columns: max-content max-content;
+    column-gap: 2rem;
+    row-gap: 0.35rem;
     justify-content: start;
+    align-items: center;
+}
+
+.grid-info-parametros .item-info {
+    justify-content: center;
+}
+
+.grid-info-parametros .label-info,
+.grid-info-parametros .valor-info {
+    line-height: 1.2;
+}
+
+.grupo-parametro-inicio {
+    margin-top: 0.75rem;
+}
+
+.divisor-parametros {
+    grid-column: span 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin: 0.25rem 0;
+}
+
+.grupo-badges {
+    display: flex;
+    gap: .35rem;
 }
 
 @media (max-width: 600px) {
