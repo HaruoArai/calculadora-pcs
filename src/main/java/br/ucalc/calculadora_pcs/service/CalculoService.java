@@ -426,6 +426,18 @@ public class CalculoService {
         LocalDate inicioIPCAE =
                 LocalDate.of(2015, 3, 26);
 
+        if (inicioParcela.isAfter(dataAtualizacao)) {
+            return BigDecimal.ONE;
+        }
+
+        // Se todo o período termina antes do IPCA-E, aplica só TR
+        if (dataAtualizacao.isBefore(inicioIPCAE)) {
+            return calcularFatorIndice(
+                    TipoIndice.TR,
+                    inicioParcela,
+                    dataAtualizacao);
+        }
+
         // Se a parcela já nasceu após o fim da TR
         if (inicioParcela.isAfter(fimTR)) {
             return calcularFatorIndice(
