@@ -92,7 +92,9 @@
 
             <div class="item-info item-info-destaque">
                 <span class="valor-info">
-                    <span th:text="${#temporals.format(calculo.dataParcela,'dd/MM/yyyy')}"></span>
+                    <!-- Utilize o código abaixo caso queira que a data mostrada seja a data da primeira parcela-->
+                    <!-- <span th:text="${#temporals.format(calculo.dataParcela,'dd/MM/yyyy')}"></span> -->
+                    <span>Dos fatos</span>
                     <span class="separador-periodo">até</span>
                     <span th:if="${calculo.tipoEmenda.name() == 'NENHUMA'}"
                           th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
