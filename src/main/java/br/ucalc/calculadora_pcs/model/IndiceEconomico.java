@@ -18,6 +18,7 @@ public class IndiceEconomico {
 
     private YearMonth referencia; // mês/ano de referência (ex: 2020-05)
 
+    @Column(precision = 38, scale = 4)
     private BigDecimal valor; // valor percentual do índice naquele mês
 
     public IndiceEconomico() {}

@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import br.ucalc.calculadora_pcs.model.enums.TipoEmenda;
 import br.ucalc.calculadora_pcs.model.enums.TipoRegraJuros;
 import jakarta.validation.constraints.AssertTrue;
+import br.ucalc.calculadora_pcs.validation.ValidarDataCitacao;
 
 import java.time.LocalDate;
 
@@ -15,6 +16,7 @@ import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@ValidarDataCitacao
 public class CalculoFormDTO {
 
     @NotBlank(message = "Informe o autor")
@@ -48,19 +50,6 @@ public class CalculoFormDTO {
 
     @NotNull(message = "Selecione o tipo de juros")
     private TipoJuros tipoJuros;
-
-    @AssertTrue(message = "Informe a data da citação")
-    public boolean isDataCitacaoValida() {
-        if (tipoJuros == null) {
-            return true;
-        }
-
-        if (tipoJuros.name().equals("SEM_JUROS")) {
-            return true;
-        }
-
-        return dataCitacao != null;
-    }
 
     // Getters e Setters
     public String getAutor() { return autor; }

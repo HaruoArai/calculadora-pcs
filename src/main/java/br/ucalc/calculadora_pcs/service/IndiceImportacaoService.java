@@ -63,9 +63,9 @@ public class IndiceImportacaoService {
 
                 repository.save(indice);
             }
-
-            workbook.close();
-            fis.close();
         }
+
+        workbook.close();
+        fis.close();
     }
 }
