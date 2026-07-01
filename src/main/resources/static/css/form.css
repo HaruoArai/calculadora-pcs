@@ -335,3 +335,30 @@
 .campo-botao-parcela {
     width: 38px;
 }
+
+/* ==========================================
+   CONTAINER DE PARCELAS COM SCROLL
+   ========================================== */
+
+#parcelas-container {
+    max-height: 370px; /* altura de ~4 linhas visíveis */
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--azul-secundario) var(--azul-claro);
+}
+
+/* Estilo da scrollbar para Chrome/Edge */
+#parcelas-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#parcelas-container::-webkit-scrollbar-track {
+    background: var(--azul-claro);
+    border-radius: 999px;
+}
+
+#parcelas-container::-webkit-scrollbar-thumb {
+    background-color: var(--azul-secundario);
+    border-radius: 999px;
+}

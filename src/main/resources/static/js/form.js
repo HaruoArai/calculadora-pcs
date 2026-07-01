@@ -295,6 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             criarLinhaParcela(novaData, '0,00');
             reindexarParcelas();
+
+            // Rola para mostrar a nova parcela criada
+            //parcelasContainer.scrollTop = parcelasContainer.scrollHeight;
         });
 
         parcelasContainer.addEventListener('click', (e) => {
