@@ -13,14 +13,4 @@ public class CalculadoraPcsApplication {
 		SpringApplication.run(CalculadoraPcsApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner executarImportacao(
-			IndiceImportacaoService service) {
-
-		return args -> {
-
-			service.importar("arquivos/indices.xlsx");
-
-		};
-	}
 }

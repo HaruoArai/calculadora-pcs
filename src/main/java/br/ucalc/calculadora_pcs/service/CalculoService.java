@@ -225,6 +225,7 @@ public class CalculoService {
             case TR -> TipoIndice.TR;
             case IPCA_E -> TipoIndice.IPCA_E;
             case SELIC -> TipoIndice.SELIC;
+            case IGPM -> TipoIndice.IGPM;
         };
     }
 
@@ -313,6 +314,11 @@ public class CalculoService {
             case IPCA_E:
                 return calcularFatorIndice(
                         TipoIndice.IPCA_E,
+                        inicio,
+                        fim);
+            case IGPM:
+                return calcularFatorIndice(
+                        TipoIndice.IGPM,
                         inicio,
                         fim);
             case SELIC:

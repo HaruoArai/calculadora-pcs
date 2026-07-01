@@ -11,8 +11,10 @@ import br.ucalc.calculadora_pcs.model.enums.TipoJuros;
 import br.ucalc.calculadora_pcs.model.enums.TipoRegraJuros;
 import br.ucalc.calculadora_pcs.model.ParcelaCalculo;
 import br.ucalc.calculadora_pcs.repository.CalculoRepository;
+import br.ucalc.calculadora_pcs.repository.IndiceEconomicoRepository;
 import br.ucalc.calculadora_pcs.repository.ProcessoRepository;
 import br.ucalc.calculadora_pcs.service.CalculoService;
+import br.ucalc.calculadora_pcs.service.IndiceImportacaoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,12 +32,19 @@ public class CalculoController {
     private final CalculoRepository calculoRepository;
     private final CalculoService calculoService;
 
+    private final IndiceImportacaoService indiceImportacaoService;
+    private final IndiceEconomicoRepository indiceEconomicoRepository;
+
     public CalculoController(ProcessoRepository processoRepository,
                              CalculoRepository calculoRepository,
-                             CalculoService calculoService) {
+                             CalculoService calculoService,
+                             IndiceImportacaoService indiceImportacaoService,
+                             IndiceEconomicoRepository indiceEconomicoRepository) {
         this.processoRepository = processoRepository;
         this.calculoRepository = calculoRepository;
         this.calculoService = calculoService;
+        this.indiceImportacaoService = indiceImportacaoService;
+        this.indiceEconomicoRepository = indiceEconomicoRepository;
     }
 
     @GetMapping("/novo")
@@ -158,5 +167,21 @@ public class CalculoController {
         model.addAttribute("tiposEmenda", TipoEmenda.values());
 
         return "calculo/form";
+    }
+
+    @GetMapping("/importar-indices")
+    @ResponseBody
+    public String importarIndices() throws Exception {
+        System.out.println("Iniciando importação...");
+
+        indiceEconomicoRepository.deleteAllInBatch();
+
+        System.out.println("Tabela limpa.");
+
+        indiceImportacaoService.importar("arquivos/indices.xlsx");
+
+        System.out.println("Importação finalizada.");
+
+        return "Índices importados com sucesso!";
     }
 }

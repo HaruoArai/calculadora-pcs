@@ -7,6 +7,9 @@ public enum TipoCorrecao {
     IPCA_E(
             "IPCA-E (07/1994 em diante)"
     ),
+    IGPM(
+            "IGP-M (07/1994 em diante)"
+    ),
     SELIC(
             "SELIC (07/1994 em diante)"
     ),
