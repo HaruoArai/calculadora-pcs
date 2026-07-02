@@ -45,12 +45,20 @@ public class CalculoService {
 
         LocalDate dataFinalCorrecaoJuros = dataFinal;
         LocalDate dataInicioSelic = null;
+        LocalDate dataFinalSelic = dataFinal;
+        LocalDate dataInicioEc136 = null;
 
         if (calculo.getTipoEmenda() == TipoEmenda.EC113) {
-
             dataFinalCorrecaoJuros = LocalDate.of(2021, 12, 8);
-
             dataInicioSelic = LocalDate.of(2021, 12, 9);
+            dataFinalSelic = dataFinal;
+        }
+
+        if (calculo.getTipoEmenda() == TipoEmenda.EC136) {
+            dataFinalCorrecaoJuros = LocalDate.of(2021, 12, 8);
+            dataInicioSelic = LocalDate.of(2021, 12, 9);
+            dataFinalSelic = LocalDate.of(2025, 9, 9);
+            dataInicioEc136 = LocalDate.of(2025, 9, 10);
         }
 
         LocalDate dataCitacao =
@@ -142,22 +150,27 @@ public class CalculoService {
             item.setValorJuros(valorJuros);
 
             // ---- SELIC EC 113/2021 ----
-            BigDecimal taxaSelic = BigDecimal.ZERO;
-            BigDecimal valorSelic = BigDecimal.ZERO;
+            LocalDate inicioSelicLinha = null;
 
-            if (calculo.getTipoEmenda() == TipoEmenda.EC113
-                    && dataInicioSelic != null
-                    && !dataInicioSelic.isAfter(dataFinal)) {
-
-                LocalDate inicioSelicLinha =
+            if (dataInicioSelic != null) {
+                inicioSelicLinha =
                         dataParcela.isBefore(dataInicioSelic)
                                 ? dataInicioSelic
                                 : dataParcela;
+            }
+
+            BigDecimal taxaSelic = BigDecimal.ZERO;
+            BigDecimal valorSelic = BigDecimal.ZERO;
+
+            if ((calculo.getTipoEmenda() == TipoEmenda.EC113
+                    || calculo.getTipoEmenda() == TipoEmenda.EC136)
+                    && dataInicioSelic != null
+                    && !dataInicioSelic.isAfter(dataFinalSelic)) {
 
                 taxaSelic =
                         calcularSelicAcumulada(
                                 inicioSelicLinha,
-                                dataFinal);
+                                dataFinalSelic);
 
                 BigDecimal baseSelic =
                         valorAtualizado.add(valorJuros);
@@ -176,6 +189,116 @@ public class CalculoService {
 
             item.setTaxaSelic(taxaSelic);
             item.setValorSelic(valorSelic);
+
+            // ---- EC 136/2025 ----
+            BigDecimal correcaoSelicIpca = BigDecimal.ZERO;
+            BigDecimal valorCorrecaoSelicIpca = BigDecimal.ZERO;
+            BigDecimal jurosSelic = BigDecimal.ZERO;
+            BigDecimal valorJurosSelic = BigDecimal.ZERO;
+            BigDecimal indexadorIpca = BigDecimal.ZERO;
+            BigDecimal valorAtualizadoEc136 = BigDecimal.ZERO;
+            BigDecimal correcaoSobreJurosSelic = BigDecimal.ZERO;
+            BigDecimal taxaJurosDoisPorCento = BigDecimal.ZERO;
+            BigDecimal valorJurosEc136 = BigDecimal.ZERO;
+            BigDecimal valorTotalEc136 = BigDecimal.ZERO;
+
+            if (calculo.getTipoEmenda() == TipoEmenda.EC136
+                    && dataInicioEc136 != null
+                    && !dataInicioEc136.isAfter(dataFinal)) {
+
+                BigDecimal baseSemSelic =
+                        valorAtualizado
+                                .add(valorJuros);
+
+                item.setBaseEc136(baseSemSelic);
+
+                correcaoSelicIpca =
+                        calcularIpcaAcumulado(
+                                inicioSelicLinha,
+                                dataFinalSelic);
+
+                valorCorrecaoSelicIpca =
+                        baseSemSelic
+                                .multiply(correcaoSelicIpca.divide(
+                                        CEM,
+                                        ESCALA_INTERMEDIARIA,
+                                        RoundingMode.HALF_UP))
+                                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+                jurosSelic =
+                        taxaSelic
+                                .subtract(correcaoSelicIpca)
+                                .setScale(7, RoundingMode.HALF_UP);
+
+                valorJurosSelic =
+                        baseSemSelic
+                                .multiply(jurosSelic.divide(
+                                        CEM,
+                                        ESCALA_INTERMEDIARIA,
+                                        RoundingMode.HALF_UP))
+                                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+                LocalDate inicioIpcaLinha =
+                        dataParcela.isAfter(dataInicioEc136)
+                                ? dataParcela
+                                : dataInicioEc136;
+
+                indexadorIpca =
+                        calcularIpcaAcumulado(
+                                inicioIpcaLinha,
+                                dataFinal);
+
+                valorAtualizadoEc136 =
+                        baseSemSelic
+                                .add(valorCorrecaoSelicIpca)
+                                .multiply(indexadorIpca.divide(
+                                        CEM,
+                                        ESCALA_INTERMEDIARIA,
+                                        RoundingMode.HALF_UP))
+                                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+                correcaoSobreJurosSelic =
+                        valorJurosSelic
+                                .multiply(indexadorIpca.divide(
+                                        CEM,
+                                        ESCALA_INTERMEDIARIA,
+                                        RoundingMode.HALF_UP))
+                                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+                taxaJurosDoisPorCento =
+                        calcularJurosDoisPorCentoAa(
+                                inicioIpcaLinha,
+                                dataFinal);
+
+                valorJurosEc136 =
+                        baseSemSelic
+                                .add(valorCorrecaoSelicIpca)
+                                .add(valorAtualizadoEc136)
+                                .multiply(taxaJurosDoisPorCento.divide(
+                                        CEM,
+                                        ESCALA_INTERMEDIARIA,
+                                        RoundingMode.HALF_UP))
+                                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+                valorTotalEc136 =
+                        baseSemSelic
+                                .add(valorCorrecaoSelicIpca)
+                                .add(valorJurosSelic)
+                                .add(valorAtualizadoEc136)
+                                .add(correcaoSobreJurosSelic)
+                                .add(valorJurosEc136);
+            }
+
+            item.setCorrecaoSelicIpca(correcaoSelicIpca);
+            item.setValorCorrecaoSelicIpca(valorCorrecaoSelicIpca);
+            item.setJurosSelic(jurosSelic);
+            item.setValorJurosSelic(valorJurosSelic);
+            item.setIndexadorIpca(indexadorIpca);
+            item.setValorAtualizadoEc136(valorAtualizadoEc136);
+            item.setCorrecaoSobreJurosSelic(correcaoSobreJurosSelic);
+            item.setTaxaJurosDoisPorCento(taxaJurosDoisPorCento);
+            item.setValorJurosEc136(valorJurosEc136);
+            item.setValorTotalEc136(valorTotalEc136);
 
             // ---- Total ----
             item.setTotal(
@@ -471,6 +594,11 @@ public class CalculoService {
             LocalDate inicio,
             LocalDate fim) {
 
+        // proteção quando o início é depois do fim.
+        if (inicio.isAfter(fim)) {
+            return BigDecimal.ZERO;
+        }
+
         BigDecimal acumulado = BigDecimal.ZERO;
 
         YearMonth mes = YearMonth.from(inicio);
@@ -511,6 +639,10 @@ public class CalculoService {
             LocalDate inicio,
             LocalDate fim,
             YearMonth mes) {
+
+        if (inicio.isAfter(fim)) {
+            return 0;
+        }
 
         YearMonth mesInicio = YearMonth.from(inicio);
         YearMonth mesFim = YearMonth.from(fim);
@@ -669,6 +801,65 @@ public class CalculoService {
         }
 
         return acumulado;
+    }
+
+    private BigDecimal calcularIpcaAcumulado(
+            LocalDate inicio,
+            LocalDate fim) {
+
+        if (inicio.isAfter(fim)) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal fatorIpca =
+                calcularFatorIndice(
+                        TipoIndice.IPCA,
+                        inicio,
+                        fim);
+
+        return fatorIpca
+                .subtract(BigDecimal.ONE)
+                .multiply(CEM)
+                .setScale(7, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal calcularJurosDoisPorCentoAa(
+            LocalDate inicio,
+            LocalDate fim) {
+
+        if (inicio.isAfter(fim)) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal taxaMensal =
+                BigDecimal.valueOf(0.1667);
+
+        BigDecimal acumulado = BigDecimal.ZERO;
+
+        YearMonth mes = YearMonth.from(inicio);
+        YearMonth mesFim = YearMonth.from(fim);
+
+        while (!mes.isAfter(mesFim)) {
+
+            int dias =
+                    diasProRata30(
+                            inicio,
+                            fim,
+                            mes);
+
+            BigDecimal taxaProRata =
+                    taxaMensal
+                            .divide(BigDecimal.valueOf(30),
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(dias));
+
+            acumulado = acumulado.add(taxaProRata);
+
+            mes = mes.plusMonths(1);
+        }
+
+        return acumulado.setScale(7, RoundingMode.HALF_UP);
     }
 
 }

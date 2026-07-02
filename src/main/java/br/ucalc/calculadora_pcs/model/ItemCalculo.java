@@ -34,6 +34,33 @@ public class ItemCalculo {
 
     private BigDecimal total;             // valorAtualizado + valorJuros
 
+    // EC 136/2025
+    private BigDecimal baseEc136;
+
+    @Column(precision = 38, scale = 7)
+    private BigDecimal correcaoSelicIpca;
+
+    private BigDecimal valorCorrecaoSelicIpca;
+
+    @Column(precision = 38, scale = 7)
+    private BigDecimal jurosSelic;
+
+    private BigDecimal valorJurosSelic;
+
+    @Column(precision = 38, scale = 7)
+    private BigDecimal indexadorIpca;
+
+    private BigDecimal valorAtualizadoEc136;
+
+    private BigDecimal correcaoSobreJurosSelic;
+
+    @Column(precision = 38, scale = 7)
+    private BigDecimal taxaJurosDoisPorCento;
+
+    private BigDecimal valorJurosEc136;
+
+    private BigDecimal valorTotalEc136;
+
     public ItemCalculo() {}
 
     // Getters e Setters
@@ -77,4 +104,81 @@ public class ItemCalculo {
 
     public BigDecimal getTotal() { return total; }
     public void setTotal(BigDecimal total) { this.total = total; }
+
+    public BigDecimal getBaseEc136() {
+        return baseEc136;
+    }
+    public void setBaseEc136(BigDecimal baseEc136) {
+        this.baseEc136 = baseEc136;
+    }
+
+    public BigDecimal getCorrecaoSelicIpca() {
+        return correcaoSelicIpca;
+    }
+    public void setCorrecaoSelicIpca(BigDecimal correcaoSelicIpca) {
+        this.correcaoSelicIpca = correcaoSelicIpca;
+    }
+
+    public BigDecimal getValorCorrecaoSelicIpca() {
+        return valorCorrecaoSelicIpca;
+    }
+    public void setValorCorrecaoSelicIpca(BigDecimal valorCorrecaoSelicIpca) {
+        this.valorCorrecaoSelicIpca = valorCorrecaoSelicIpca;
+    }
+
+    public BigDecimal getJurosSelic() {
+        return jurosSelic;
+    }
+    public void setJurosSelic(BigDecimal jurosSelic) {
+        this.jurosSelic = jurosSelic;
+    }
+
+    public BigDecimal getValorJurosSelic() {
+        return valorJurosSelic;
+    }
+    public void setValorJurosSelic(BigDecimal valorJurosSelic) {
+        this.valorJurosSelic = valorJurosSelic;
+    }
+
+    public BigDecimal getValorAtualizadoEc136() {
+        return valorAtualizadoEc136;
+    }
+    public void setValorAtualizadoEc136(BigDecimal valorAtualizadoEc136) {
+        this.valorAtualizadoEc136 = valorAtualizadoEc136;
+    }
+
+    public BigDecimal getIndexadorIpca() {
+        return indexadorIpca;
+    }
+    public void setIndexadorIpca(BigDecimal indexadorIpca) {
+        this.indexadorIpca = indexadorIpca;
+    }
+
+    public BigDecimal getCorrecaoSobreJurosSelic() {
+        return correcaoSobreJurosSelic;
+    }
+    public void setCorrecaoSobreJurosSelic(BigDecimal correcaoSobreJurosSelic) {
+        this.correcaoSobreJurosSelic = correcaoSobreJurosSelic;
+    }
+
+    public BigDecimal getTaxaJurosDoisPorCento() {
+        return taxaJurosDoisPorCento;
+    }
+    public void setTaxaJurosDoisPorCento(BigDecimal taxaJurosDoisPorCento) {
+        this.taxaJurosDoisPorCento = taxaJurosDoisPorCento;
+    }
+
+    public BigDecimal getValorTotalEc136() {
+        return valorTotalEc136;
+    }
+    public void setValorTotalEc136(BigDecimal valorTotalEc136) {
+        this.valorTotalEc136 = valorTotalEc136;
+    }
+
+    public BigDecimal getValorJurosEc136() {
+        return valorJurosEc136;
+    }
+    public void setValorJurosEc136(BigDecimal valorJurosEc136) {
+        this.valorJurosEc136 = valorJurosEc136;
+    }
 }

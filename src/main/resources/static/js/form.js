@@ -117,6 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const dataAnteriorEmenda =
             data && data < marcoEc113;
 
+        const marcoEc136 = new Date(2025, 8, 10); // 10/09/2025. NOTA: em JavaScript setembro é o mês 8.
+
+        const dataAnteriorEc136 =
+            data && data < marcoEc136;
+
         const correcaoSelic =
             tipoCorrecao.value === 'SELIC';
 
@@ -149,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         configurarEmenda(
             emendaEc136,
-            dataAnteriorEmenda,
-            'Regra constitucional disponível apenas para atualizações a partir de 09/12/2021.'
+            dataAnteriorEc136,
+            'A EC 136/2025 somente pode ser aplicada quando a data final da atualização for igual ou posterior a 10/09/2025.'
         );
     }
 
