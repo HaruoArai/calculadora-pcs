@@ -317,8 +317,12 @@
 
 .acoes-resultado {
     display: flex;
-    gap: 12px;
-    margin-top: 1rem;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #d8dee8;
 }
 
 .acoes-resultado .btn {
@@ -367,114 +371,140 @@
    COMPLEMENTO EC 136/2025
    ================================================== */
 
-.ec136-subtitulo{
-    margin: .35rem 0 .5rem;
-    padding: .45rem 0 .55rem;
-    border-top:1px solid #d8dee8;
-    border-bottom:1px solid #eef2f6;
+.bloco-ec136 {
+    margin-top: 2rem;
 }
 
-.ec136-subtitulo h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 700;
+.ec136-cabecalho {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--amarelo-destaque);
+}
+
+.ec136-cabecalho-texto h5 {
     color: var(--azul-principal);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0 0 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.ec136-subtitulo span {
-    display: block;
-    margin-top: 0.35rem;
-    font-size: 0.9rem;
+.ec136-cabecalho-texto p {
     color: #6c757d;
+    font-size: 0.88rem;
+    margin: 0;
     line-height: 1.45;
 }
 
-.container > table.table {
-    margin-bottom: 0.5rem;
+.ec136-cabecalho-texto h5 .icone-secao {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
 }
 
-.legenda-ec136{
-    margin:1rem 0 2rem;
-    padding:.85rem 1rem;
+/* Scroll horizontal na tabela EC 136 */
+.tabela-ec136-scroll {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    scrollbar-width: thin;
+    scrollbar-color: var(--azul-secundario) var(--azul-claro);
+}
 
-    border:1px solid #d8dee8;
-    border-radius:8px;
+.tabela-ec136-scroll::-webkit-scrollbar {
+    height: 6px;
+}
 
-    background:#fafbfd;
-    font-size:.86rem;
+.tabela-ec136-scroll::-webkit-scrollbar-track {
+    background: var(--azul-claro);
+    border-radius: 999px;
+}
 
-    width:100%;
+.tabela-ec136-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--azul-secundario);
+    border-radius: 999px;
+}
+
+/* Tabela EC 136 — padrão unificado com a tabela principal */
+.tabela-ec136 {
+    width: 100%;
+    min-width: 1000px; /* força scroll em telas menores */
+    margin-bottom: 0;
+    font-size: 0.85rem;
+}
+
+.tabela-ec136 thead th {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.6rem 0.5rem;
+    line-height: 1.25;
+    white-space: normal;
+    border-color: rgba(255,255,255,0.15) !important;
+}
+
+.tabela-ec136 tbody td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.84rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.tabela-ec136 tbody tr:nth-child(even) {
+    background-color: var(--azul-claro);
+}
+
+/* Legenda */
+.legenda-ec136 {
+    margin: 1rem 0 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 8px;
+    background: #fafbfd;
+    font-size: 0.85rem;
 }
 
 .legenda-ec136 summary {
     cursor: pointer;
     font-weight: 700;
     color: var(--azul-principal);
+    user-select: none;
+    list-style: none;
+}
+
+.legenda-ec136 summary::-webkit-details-marker {
+    display: none;
+}
+
+.legenda-ec136[open] summary {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--cinza-borda);
 }
 
 .legenda-ec136 ul {
-    margin: 0.8rem 0 0;
-    padding-left: 1.2rem;
+    margin: 0;
+    padding-left: 1.1rem;
 }
 
 .legenda-ec136 li {
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.5;
+    color: var(--cinza-texto);
 }
 
-.acoes-resultado {
-    margin-top: 2.5rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid #d8dee8;
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
+.legenda-ec136 li strong {
+    color: var(--azul-principal);
 }
-
-.acoes-resultado .btn {
-    min-width: 140px;
-    font-weight: 600;
-}
-
-.tabela-ec136 {
-    width: 100%;
-    table-layout: auto;
-}
-
-.ec136-wrapper{
-    width: calc(100% + 80px);
-    margin-left: -40px;
-    margin-right: -40px;
-}
-
-.tabela-ec136 th,
-.tabela-ec136 td {
-    text-align: center;
-    vertical-align: middle;
-    padding: 0.45rem 0.35rem;
-    line-height: 1.2;
-}
-
-.tabela-ec136 th{
-    white-space: normal;
-    line-height: 1.15;
-    font-size: .80rem;
-}
-
-.tabela-ec136 td {
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-}
-
-.tabela-ec136 .linha-total td {
-    font-size: 0.78rem;
-    padding: 0.45rem 0.35rem;
-}
-
-/* Linha Total da tabela complementar EC136 */
-.tabela-ec136 .linha-total td,
-.tabela-ec136 .linha-total td strong {
-    font-size: 0.88rem !important;
-    font-weight: 700;
-}
-
-/* SCROLL NA TABELA DA EMENDA EC 136/2025*/

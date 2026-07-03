@@ -177,232 +177,153 @@
 
         </div>
     </div>
+    <!-- ===== TABELA PRINCIPAL ===== -->
+    <div class="tabela-resultado">
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor Devido</th>
+                <th>Fator Correção</th>
+                <th>Valor Atualizado</th>
+                <th>Taxa Juros</th>
+                <th>Valor Juros</th>
+                <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
+                    Taxa Selic
+                </th>
+                <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
+                    Valor Selic
+                </th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${calculo.itens}">
+                <td th:text="${#temporals.format(item.data, 'dd/MM/yyyy')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.valorDevido, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.indiceCorrecao,1,'POINT',7,'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.valorAtualizado, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="|${#numbers.formatDecimal(item.indiceJuros, 1, 2)}%|"></td>
+                <td th:text="${#numbers.formatDecimal(item.valorJuros, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
+                    th:text="|${#numbers.formatDecimal(item.taxaSelic, 1, 2)}%|"></td>
+                <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
+                    th:text="${#numbers.formatDecimal(item.valorSelic, 1, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.total, 1, 'POINT', 2, 'COMMA')}"></td>
+            </tr>
+            <tr class="linha-total">
+                <td>Total</td>
+                <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorDevido]),1,'POINT',2,'COMMA')}"></strong></td>
+                <td></td>
+                <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorAtualizado]),1,'POINT',2,'COMMA')}"></strong></td>
+                <td></td>
+                <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJuros]),1,'POINT',2,'COMMA')}"></strong></td>
+                <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"></td>
+                <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
+                    <strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorSelic]),1,'POINT',2,'COMMA')}"></strong>
+                </td>
+                <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![total]),1,'POINT',2,'COMMA')}"></strong></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <table class="table table-bordered table-sm">
-        <thead class="table-light">
-        <tr>
-            <th>Data</th>
-            <th>Valor devido</th>
-            <th>Fator de correção</th>
-            <th>Valor atualizado</th>
-            <th>Taxa de juros</th>
-            <th>Valor dos juros</th>
-            <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
-                Taxa Selic
-            </th>
-            <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
-                Valor da Selic
-            </th>
-            <th>Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${calculo.itens}">
-            <td th:text="${#temporals.format(item.data, 'dd/MM/yyyy')}"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorDevido, 1, 'POINT', 2, 'COMMA')}"></td>
-            <td th:text="${#numbers.formatDecimal(item.indiceCorrecao,1,'POINT',7,'COMMA')}"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorAtualizado, 1, 'POINT', 2, 'COMMA')}"></td>
-            <td th:text="|${#numbers.formatDecimal(item.indiceJuros, 1, 2)}%|"></td>
-            <td th:text="${#numbers.formatDecimal(item.valorJuros, 1, 'POINT', 2, 'COMMA')}"></td>
-            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
-                th:text="|${#numbers.formatDecimal(item.taxaSelic, 1, 2)}%|">
-            </td>
-            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
-                th:text="${#numbers.formatDecimal(item.valorSelic, 1, 'POINT', 2, 'COMMA')}">
-            </td>
-            <td th:text="${#numbers.formatDecimal(item.total, 1, 'POINT', 2, 'COMMA')}"></td>
-        </tr>
+    <!-- ===== TABELA EC 136/2025 ===== -->
+    <div th:if="${calculo.tipoEmenda.name() == 'EC136'}" class="bloco-ec136">
 
-        <tr class="linha-total">
-            <td><strong>Total</strong></td>
-
-            <td>
-                <strong th:text="${#numbers.formatDecimal(
-            #aggregates.sum(calculo.itens.![valorDevido]),
-            1, 'POINT', 2, 'COMMA')}">
-                </strong>
-            </td>
-
-            <td></td>
-
-            <td>
-                <strong th:text="${#numbers.formatDecimal(
-            #aggregates.sum(calculo.itens.![valorAtualizado]),
-            1, 'POINT', 2, 'COMMA')}">
-                </strong>
-            </td>
-
-            <td></td>
-
-            <td>
-                <strong th:text="${#numbers.formatDecimal(
-            #aggregates.sum(calculo.itens.![valorJuros]),
-            1, 'POINT', 2, 'COMMA')}">
-                </strong>
-            </td>
-
-            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"></td>
-
-            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">
-                <strong th:text="${#numbers.formatDecimal(
-            #aggregates.sum(calculo.itens.![valorSelic]),
-            1, 'POINT', 2, 'COMMA')}">
-                </strong>
-            </td>
-
-            <td>
-                <strong th:text="${#numbers.formatDecimal(
-            #aggregates.sum(calculo.itens.![total]),
-            1, 'POINT', 2, 'COMMA')}">
-                </strong>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <div th:if="${calculo.tipoEmenda.name() == 'EC136'}" class="mt-4">
-        <div class="tabela-ec136-wrapper">
-            <div class="ec136-subtitulo">
-                <h4>Complemento da EC 136/2025</h4>
-                <span>Desmembramento da Taxa Selic em correção monetária (IPCA) e juros, com aplicação do IPCA + 2% a.a.</span>
+        <div class="ec136-cabecalho">
+            <div class="ec136-cabecalho-texto">
+                <h5>
+                    <svg class="icone-secao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 17 9 11 13 15 21 6"/>
+                        <polyline points="15 6 21 6 21 12"/>
+                    </svg>
+                    Complemento EC 136/2025
+                </h5>
+                <p>Desmembramento da Taxa Selic em correção monetária (IPCA) e juros, com aplicação do IPCA + 2% a.a. a partir de 10/09/2025.</p>
             </div>
-
-            <div class="tabela-ec136-scroll">
-                <table class="table table-bordered table-sm tabela-ec136">
-                    <thead class="table-light">
-                    <tr>
-                        <th>Data</th>
-                        <th>Base EC 136</th>
-                        <th>Correção Selic (IPCA)</th>
-                        <th>Valor correção Selic (IPCA)</th>
-                        <th>Juros Selic (Selic - IPCA)</th>
-                        <th>Valor juros Selic</th>
-                        <th>Indexador IPCA</th>
-                        <th>Valor atualizado</th>
-                        <th>Correção sobre juros Selic</th>
-                        <th>Juros 2% a.a.</th>
-                        <th>Valor dos juros</th>
-                        <th>Valor total</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr th:each="item : ${calculo.itens}">
-                        <td th:text="${#temporals.format(item.data, 'dd/MM/yyyy')}"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.baseEc136, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="|${#numbers.formatDecimal(item.correcaoSelicIpca, 1, 2)}%|"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.valorCorrecaoSelicIpca, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="|${#numbers.formatDecimal(item.jurosSelic, 1, 2)}%|"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.valorJurosSelic, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="|${#numbers.formatDecimal(item.indexadorIpca, 1, 2)}%|"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.valorAtualizadoEc136, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.correcaoSobreJurosSelic, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="|${#numbers.formatDecimal(item.taxaJurosDoisPorCento, 1, 2)}%|"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.valorJurosEc136, 1, 'POINT', 2, 'COMMA')}"></td>
-
-                        <td th:text="${#numbers.formatDecimal(item.valorTotalEc136, 1, 'POINT', 2, 'COMMA')}"></td>
-                    </tr>
-
-                    <tr class="linha-total">
-                        <td><strong>Total</strong></td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                                #aggregates.sum(calculo.itens.![baseEc136]),
-                                1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td></td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![valorCorrecaoSelicIpca]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td></td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![valorJurosSelic]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td></td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![valorAtualizadoEc136]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![correcaoSobreJurosSelic]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td></td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![valorJurosEc136]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(
-                            #aggregates.sum(calculo.itens.![valorTotalEc136]),
-                            1, 'POINT', 2, 'COMMA')}">
-                            </strong>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <details class="legenda-ec136">
-                <summary>Ver critério de cálculo da EC 136/2025</summary>
-                <ul>
-                    <li><strong>Base EC 136:</strong> valor utilizado como base da emenda, correspondente ao Total da tabela principal menos o Valor da Selic.</li>
-
-                    <li><strong>Correção Selic (IPCA):</strong> percentual do IPCA correspondente ao mesmo período da Taxa Selic.</li>
-
-                    <li><strong>Valor Correção Selic (IPCA):</strong> Base EC 136 × Correção Selic (IPCA).</li>
-
-                    <li><strong>Juros Selic (Selic - IPCA):</strong> diferença entre o percentual da Taxa Selic e o percentual do IPCA do mesmo período.</li>
-
-                    <li><strong>Valor Juros Selic:</strong> Base EC 136 × Juros Selic (Selic - IPCA).</li>
-
-                    <li><strong>Indexador IPCA:</strong> percentual do IPCA acumulado de 10/09/2025 até a data final do cálculo, observando a data da parcela quando posterior.</li>
-
-                    <li><strong>Valor atualizado:</strong> (Base EC 136 + Valor Correção Selic (IPCA)) × Indexador IPCA.</li>
-
-                    <li><strong>Correção sobre Juros Selic:</strong> Valor Juros Selic × Indexador IPCA.</li>
-
-                    <li><strong>Juros 2,0% a.a.:</strong> juros simples de 2% ao ano (0,1667% ao mês), calculados de 10/09/2025 até a data final do cálculo.</li>
-
-                    <li><strong>Valor dos Juros:</strong> (Base EC 136 + Valor Correção Selic (IPCA) + Valor atualizado) × Juros 2,0% a.a.</li>
-
-                    <li><strong>Valor Total:</strong> Base EC 136 + Valor Correção Selic (IPCA) + Valor Juros Selic + Valor atualizado + Correção sobre Juros Selic + Valor dos Juros.</li>
-                </ul>
-            </details>
         </div>
+
+        <div class="tabela-resultado tabela-ec136-scroll">
+            <table class="table table-bordered table-sm tabela-ec136">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Base<br>EC 136</th>
+                    <th>Correção<br>Selic (IPCA)</th>
+                    <th>Valor<br>Correção Selic</th>
+                    <th>Juros Selic<br>(Selic − IPCA)</th>
+                    <th>Valor<br>Juros Selic</th>
+                    <th>Indexador<br>IPCA</th>
+                    <th>Valor<br>Atualizado</th>
+                    <th>Correção sobre<br>Juros Selic</th>
+                    <th>Juros<br>2% a.a.</th>
+                    <th>Valor<br>Juros</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${calculo.itens}">
+                    <td th:text="${#temporals.format(item.data, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.baseEc136, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="|${#numbers.formatDecimal(item.correcaoSelicIpca, 1, 2)}%|"></td>
+                    <td th:text="${#numbers.formatDecimal(item.valorCorrecaoSelicIpca, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="|${#numbers.formatDecimal(item.jurosSelic, 1, 2)}%|"></td>
+                    <td th:text="${#numbers.formatDecimal(item.valorJurosSelic, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="|${#numbers.formatDecimal(item.indexadorIpca, 1, 2)}%|"></td>
+                    <td th:text="${#numbers.formatDecimal(item.valorAtualizadoEc136, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.correcaoSobreJurosSelic, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="|${#numbers.formatDecimal(item.taxaJurosDoisPorCento, 1, 2)}%|"></td>
+                    <td th:text="${#numbers.formatDecimal(item.valorJurosEc136, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.valorTotalEc136, 1, 'POINT', 2, 'COMMA')}"></td>
+                </tr>
+                <tr class="linha-total">
+                    <td>Total</td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![baseEc136]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorCorrecaoSelicIpca]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJurosSelic]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorAtualizadoEc136]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![correcaoSobreJurosSelic]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJurosEc136]),1,'POINT',2,'COMMA')}"></strong></td>
+                    <td><strong th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorTotalEc136]),1,'POINT',2,'COMMA')}"></strong></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <details class="legenda-ec136">
+            <summary>
+                <svg style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.9.8-1.7 1.3-1.7 2.2"/>
+                    <circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"/>
+                </svg>
+                Ver critério de cálculo da EC 136/2025
+            </summary>
+            <ul>
+                <li><strong>Base EC 136:</strong> Total da tabela principal menos o Valor da Selic.</li>
+                <li><strong>Correção Selic (IPCA):</strong> Percentual do IPCA correspondente ao mesmo período da Taxa Selic.</li>
+                <li><strong>Valor Correção Selic:</strong> Base EC 136 × Correção Selic (IPCA).</li>
+                <li><strong>Juros Selic (Selic − IPCA):</strong> Diferença entre o percentual da Taxa Selic e o IPCA do mesmo período.</li>
+                <li><strong>Valor Juros Selic:</strong> Base EC 136 × Juros Selic.</li>
+                <li><strong>Indexador IPCA:</strong> IPCA acumulado de 10/09/2025 até a data final, observando a data da parcela quando posterior.</li>
+                <li><strong>Valor Atualizado:</strong> (Base EC 136 + Valor Correção Selic) × Indexador IPCA.</li>
+                <li><strong>Correção sobre Juros Selic:</strong> Valor Juros Selic × Indexador IPCA.</li>
+                <li><strong>Juros 2% a.a.:</strong> Juros simples de 0,1667% ao mês, de 10/09/2025 até a data final.</li>
+                <li><strong>Valor Juros:</strong> (Base EC 136 + Valor Correção Selic + Valor Atualizado) × Juros 2% a.a.</li>
+                <li><strong>Total:</strong> Base EC 136 + Valor Correção Selic + Valor Juros Selic + Valor Atualizado + Correção sobre Juros Selic + Valor Juros.</li>
+            </ul>
+        </details>
     </div>
 
     <div class="acoes-resultado">
