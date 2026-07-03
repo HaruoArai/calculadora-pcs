@@ -20,6 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import br.ucalc.calculadora_pcs.service.PdfService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.thymeleaf.context.Context;
+
+import java.io.IOException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,16 +40,20 @@ public class CalculoController {
     private final IndiceImportacaoService indiceImportacaoService;
     private final IndiceEconomicoRepository indiceEconomicoRepository;
 
+    private final PdfService pdfService;
+
     public CalculoController(ProcessoRepository processoRepository,
                              CalculoRepository calculoRepository,
                              CalculoService calculoService,
                              IndiceImportacaoService indiceImportacaoService,
-                             IndiceEconomicoRepository indiceEconomicoRepository) {
+                             IndiceEconomicoRepository indiceEconomicoRepository,
+                             PdfService pdfService) {
         this.processoRepository = processoRepository;
         this.calculoRepository = calculoRepository;
         this.calculoService = calculoService;
         this.indiceImportacaoService = indiceImportacaoService;
         this.indiceEconomicoRepository = indiceEconomicoRepository;
+        this.pdfService = pdfService;
     }
 
     @GetMapping("/novo")
@@ -183,5 +192,28 @@ public class CalculoController {
         System.out.println("Importação finalizada.");
 
         return "Índices importados com sucesso!";
+    }
+
+    @GetMapping("/resultado/{id}/pdf")
+    public void gerarPdf(@PathVariable Long id,
+                         HttpServletResponse response) throws IOException {
+
+        Calculo calculo = calculoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cálculo não encontrado: " + id));
+
+        Context context = new Context();
+        context.setVariable("calculo", calculo);
+
+        byte[] pdf = pdfService.gerarPdf("calculo/resultado-pdf", context);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition",
+                "inline; filename=calculo-" + calculo.getId() + ".pdf");
+
+        //Utilize o código abaixo para gerar o pdf diretamente, sem visualizar antes.
+        //response.setHeader("Content-Disposition",
+        //        "attachment; filename=calculo-" + calculo.getId() + ".pdf");
+
+        response.getOutputStream().write(pdf);
     }
 }

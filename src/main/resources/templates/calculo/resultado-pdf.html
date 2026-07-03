@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+
+        @page {
+            size: A4 landscape;
+            margin: 12mm 12mm 25mm 12mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 11px;
+            color: #1f2933;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 18mm;
+        }
+
+        /* ==============================
+           CABEÇALHO DO DOCUMENTO
+           ============================== */
+
+        .cabecalho-doc {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #0d2b4e;
+            padding-bottom: 7px;
+            margin-bottom: 10px;
+        }
+
+        .cabecalho-doc-texto h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #0d2b4e;
+            font-weight: bold;
+        }
+
+        .cabecalho-doc-texto p {
+            margin: 2px 0 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .cabecalho-doc-linha {
+            width: 6px;
+            height: 36px;
+            background: #c8860d;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ==============================
+           SEÇÕES
+           ============================== */
+
+        .secao {
+            margin-bottom: 10px;
+        }
+
+        .secao-titulo {
+            font-size: 12.5px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #0d2b4e;
+            padding: 4px 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            border-radius: 2px;
+        }
+
+        .espaco-entre-tabelas {
+            height: 12px;   /* ajuste para 10px, 12px ou 15px conforme desejar */
+        }
+
+        /* ==============================
+           GRID DE INFORMAÇÕES
+           ============================== */
+
+        .info-linha {
+            display: flex;
+            gap: 0;
+            margin-bottom: 3px;
+        }
+
+        .info-celula {
+            flex: 1;
+            border: 1px solid #d8dee8;
+            padding: 4px 6px;
+            margin-right: -1px;
+        }
+
+        .info-celula:last-child {
+            margin-right: 0;
+        }
+
+        .info-celula .label {
+            display: block;
+            font-size: 10.5px;
+            font-weight: bold;
+            color: #0d2b4e;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 1px;
+            opacity: 0.8;
+        }
+
+        .info-celula .valor {
+            font-size: 11px;
+            color: #1f2933;
+        }
+
+        /* ==============================
+           TABELAS
+           ============================== */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        /* Cabeçalho tabela principal */
+        .tabela-principal thead th {
+            background: #0d2b4e;
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: bold;
+            padding: 4px 3px;
+            border: 1px solid #1a3d6b;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tabela-principal tbody td {
+            font-size: 11.2px;
+            padding: 3px 3px;
+            border: 1px solid #d8dee8;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tabela-principal tbody tr:nth-child(even) td {
+            background-color: #f4f7fb;
+        }
+
+        /* Cabeçalho tabela EC136 — cor diferente para diferenciar */
+        .tabela-ec136 thead th {
+            background: #15406e;
+            color: #ffffff;
+            font-size: 12.4px;
+            font-weight: bold;
+            padding: 3px 2px;
+            border: 1px solid #1e4f85;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+
+        .tabela-ec136 tbody td {
+            font-size: 10.4px;
+            padding: 2.8px 2px;
+            border: 1px solid #d8dee8;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tabela-ec136 tbody tr:nth-child(even) td {
+            background-color: #f0f4f9;
+        }
+
+        /* Linha total — ambas as tabelas */
+        .linha-total td {
+            background-color: #e8eef5 !important;
+            font-weight: bold;
+            color: #0d2b4e;
+            border-top: 2px solid #0d2b4e !important;
+        }
+
+        /* ==============================
+           LEGENDA EC136
+           ============================== */
+
+        .legenda-ec136-pdf {
+            margin-top: 8px;
+            padding: 6px 8px;
+            border: 1px solid #d8dee8;
+            border-left: 3px solid #c8860d;
+            background: #fafbfd;
+            font-size: 10.2px;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        .legenda-ec136-pdf .legenda-titulo {
+            font-size: 10.8px;
+            font-weight: bold;
+            color: #0d2b4e;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .legenda-ec136-pdf .legenda-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px 16px;
+        }
+
+        .legenda-ec136-pdf .legenda-item {
+            color: #333;
+        }
+
+        .legenda-ec136-pdf .legenda-item strong {
+            color: #0d2b4e;
+        }
+
+        /* ==============================
+           RODAPÉ
+           ============================== */
+
+        .rodape {
+            margin-top: 25px;          /* distância do conteúdo */
+            padding-top: 4px;
+
+            border-top: 1px solid #d8dee8;
+
+            text-align: center;
+            font-size: 9.7px;
+            color: #777;
+
+            page-break-inside: avoid;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- CABEÇALHO DO DOCUMENTO -->
+<div class="cabecalho-doc">
+    <div class="cabecalho-doc-texto">
+        <h1>Memória de Cálculo Judicial</h1>
+        <p>Procuradoria-Geral do Estado de Mato Grosso do Sul &#160;•&#160; PCS/UCALC</p>
+    </div>
+    <div class="cabecalho-doc-linha"></div>
+</div>
+
+<!-- DADOS DO PROCESSO -->
+<div class="secao">
+    <div class="secao-titulo">Dados do Processo</div>
+
+    <div class="info-linha">
+        <div class="info-celula">
+            <span class="label">Autor</span>
+            <span class="valor" th:text="${calculo.processo.autor}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Réu</span>
+            <span class="valor" th:text="${calculo.processo.reu}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Autos</span>
+            <span class="valor" th:text="${calculo.processo.autos}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Comarca</span>
+            <span class="valor" th:text="${calculo.processo.comarca}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Vara</span>
+            <span class="valor" th:text="${calculo.processo.vara}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">PGENET</span>
+            <span class="valor" th:text="${calculo.processo.pgenet}"></span>
+        </div>
+    </div>
+</div>
+
+<!-- PARÂMETROS UTILIZADOS -->
+<div class="secao">
+    <div class="secao-titulo">Parâmetros Utilizados</div>
+
+    <!-- Linha 1: Correção + Período da Correção -->
+    <div class="info-linha">
+        <div class="info-celula">
+            <span class="label">Correção Monetária</span>
+            <span class="valor" th:text="${calculo.tipoCorrecao.descricao}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Período da Correção</span>
+            <span class="valor">
+                Dos fatos até
+                <span th:if="${calculo.tipoEmenda.name() == 'NENHUMA'}"
+                      th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() != 'NENHUMA'}">08/12/2021</span>
+            </span>
+        </div>
+        <!-- Juros: tipo + período + forma de contagem na mesma linha -->
+        <div class="info-celula" th:if="${calculo.tipoJuros.name() != 'SEM_JUROS'}">
+            <span class="label">Juros de Mora</span>
+            <span class="valor" th:text="${calculo.tipoJuros.descricao}"></span>
+        </div>
+        <div class="info-celula" th:if="${calculo.tipoJuros.name() != 'SEM_JUROS'}">
+            <span class="label">Forma de Contagem</span>
+            <span class="valor" th:text="${calculo.tipoRegraJuros.descricao}"></span>
+        </div>
+        <div class="info-celula" th:if="${calculo.tipoJuros.name() != 'SEM_JUROS'}">
+            <span class="label">Período dos Juros</span>
+            <span class="valor">
+                <span th:text="${#temporals.format(calculo.dataCitacao,'dd/MM/yyyy')}"></span>
+                até
+                <span th:if="${calculo.tipoEmenda.name() == 'NENHUMA'}"
+                      th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+                <span th:if="${calculo.tipoEmenda.name() != 'NENHUMA'}">08/12/2021</span>
+            </span>
+        </div>
+        <div class="info-celula" th:if="${calculo.tipoJuros.name() == 'SEM_JUROS'}">
+            <span class="label">Juros de Mora</span>
+            <span class="valor">Sem juros moratórios</span>
+        </div>
+    </div>
+
+    <!-- Linha 2: Regra Constitucional + Período (só se houver emenda) -->
+    <div class="info-linha"
+         th:if="${calculo.tipoEmenda != null and calculo.tipoEmenda.name() != 'NENHUMA'}">
+        <div class="info-celula">
+            <span class="label">Regra Constitucional</span>
+            <span class="valor" th:text="${calculo.tipoEmenda.descricao}"></span>
+        </div>
+        <div class="info-celula">
+            <span class="label">Período da Regra Constitucional</span>
+            <span class="valor">
+                09/12/2021 até
+                <span th:text="${#temporals.format(calculo.dataAtualizacao,'dd/MM/yyyy')}"></span>
+            </span>
+        </div>
+        <!-- Células vazias para manter alinhamento com a linha 1 -->
+        <div class="info-celula" style="border:none; background:transparent;"></div>
+        <div class="info-celula" style="border:none; background:transparent;"></div>
+        <div class="info-celula" style="border:none; background:transparent;"></div>
+    </div>
+</div>
+
+<!-- TABELA PRINCIPAL -->
+<div class="secao">
+    <div class="secao-titulo">Tabela de Atualização</div>
+
+    <table class="tabela-principal">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Valor Devido</th>
+            <th>Fator Correção</th>
+            <th>Valor Atualizado</th>
+            <th>Taxa Juros</th>
+            <th>Valor Juros</th>
+            <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">Taxa Selic</th>
+            <th th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}">Valor Selic</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${calculo.itens}">
+            <td th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorDevido,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.indiceCorrecao,1,'POINT',7,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorAtualizado,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.indiceJuros,1,2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorJuros,1,'POINT',2,'COMMA')}"></td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
+                th:text="|${#numbers.formatDecimal(item.taxaSelic,1,2)}%|"></td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
+                th:text="${#numbers.formatDecimal(item.valorSelic,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.total,1,'POINT',2,'COMMA')}"></td>
+        </tr>
+        <tr class="linha-total">
+            <td>Total</td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorDevido]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorAtualizado]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJuros]),1,'POINT',2,'COMMA')}"></td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"></td>
+            <td th:if="${calculo.tipoEmenda.name() == 'EC113' or calculo.tipoEmenda.name() == 'EC136'}"
+                th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorSelic]),1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![total]),1,'POINT',2,'COMMA')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="espaco-entre-tabelas"></div>
+</div>
+
+<!-- TABELA EC 136/2025 -->
+<div class="secao" th:if="${calculo.tipoEmenda.name() == 'EC136'}">
+    <div class="secao-titulo">Complemento EC 136/2025 - Decomposição da Taxa Selic (IPCA + 2% a.a.)</div>
+
+    <table class="tabela-ec136">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Base EC 136</th>
+            <th>Correção<br/>Selic (IPCA)</th>
+            <th>Valor<br/>Correção Selic</th>
+            <th>Juros Selic<br/>(Selic - IPCA)</th>
+            <th>Valor<br/>Juros Selic</th>
+            <th>Indexador<br/>IPCA</th>
+            <th>Valor<br/>Atualizado</th>
+            <th>Correção sobre<br/>Juros Selic</th>
+            <th>Juros<br/>2% a.a.</th>
+            <th>Valor<br/>Juros</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${calculo.itens}">
+            <td th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.baseEc136,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.correcaoSelicIpca,1,2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorCorrecaoSelicIpca,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.jurosSelic,1,2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorJurosSelic,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.indexadorIpca,1,2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorAtualizadoEc136,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.correcaoSobreJurosSelic,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="|${#numbers.formatDecimal(item.taxaJurosDoisPorCento,1,2)}%|"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorJurosEc136,1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.valorTotalEc136,1,'POINT',2,'COMMA')}"></td>
+        </tr>
+        <tr class="linha-total">
+            <td>Total</td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![baseEc136]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorCorrecaoSelicIpca]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJurosSelic]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorAtualizadoEc136]),1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![correcaoSobreJurosSelic]),1,'POINT',2,'COMMA')}"></td>
+            <td></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorJurosEc136]),1,'POINT',2,'COMMA')}"></td>
+            <td th:text="${#numbers.formatDecimal(#aggregates.sum(calculo.itens.![valorTotalEc136]),1,'POINT',2,'COMMA')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- LEGENDA EC136 em 2 colunas -->
+    <div class="legenda-ec136-pdf">
+        <div class="legenda-titulo">Critério de Cálculo - EC 136/2025</div>
+        <div class="legenda-grid">
+            <div class="legenda-item"><strong>Base EC 136:</strong> Total da tabela principal menos o Valor da Selic.</div>
+            <div class="legenda-item"><strong>Correção Selic (IPCA):</strong> IPCA correspondente ao mesmo período da Taxa Selic.</div>
+            <div class="legenda-item"><strong>Valor Correção Selic:</strong> Base EC 136 × Correção Selic (IPCA).</div>
+            <div class="legenda-item"><strong>Juros Selic (Selic - IPCA):</strong> Taxa Selic menos IPCA do mesmo período.</div>
+            <div class="legenda-item"><strong>Valor Juros Selic:</strong> Base EC 136 × Juros Selic.</div>
+            <div class="legenda-item"><strong>Indexador IPCA:</strong> IPCA acumulado de 10/09/2025 até a data final.</div>
+            <div class="legenda-item"><strong>Valor Atualizado:</strong> (Base EC 136 + Valor Correção Selic) × Indexador IPCA.</div>
+            <div class="legenda-item"><strong>Correção sobre Juros Selic:</strong> Valor Juros Selic × Indexador IPCA.</div>
+            <div class="legenda-item"><strong>Juros 2% a.a.:</strong> Juros simples de 0,1667% ao mês a partir de 10/09/2025.</div>
+            <div class="legenda-item"><strong>Valor Juros:</strong> (Base EC 136 + Valor Correção Selic + Valor Atualizado) × Juros 2% a.a.</div>
+            <div class="legenda-item" style="grid-column: span 2"><strong>Total:</strong> Base EC 136 + Valor Correção Selic + Valor Juros Selic + Valor Atualizado + Correção sobre Juros Selic + Valor Juros.</div>
+        </div>
+    </div>
+</div>
+
+<!-- RODAPÉ FIXO -->
+<div class="rodape">
+    Sistema de Cálculos Judiciais &#160;•&#160; Procuradoria-Geral do Estado de Mato Grosso do Sul &#160;•&#160; PCS/UCALC
+</div>
+
+</body>
+</html>

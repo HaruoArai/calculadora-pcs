@@ -8,7 +8,7 @@ public enum TipoJuros {
             "0,5% ao mês"
     ),
     MORA_POUPANCA(
-            "0,5% ao mês → Caderneta da Poupança (01/08/2009 em diante)"
+            "0,5% ao mês; após, Caderneta da Poupança (01/08/2009 em diante)"
     );
 
     private final String descricao;
