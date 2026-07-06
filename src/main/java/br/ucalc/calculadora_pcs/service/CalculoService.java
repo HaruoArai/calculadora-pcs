@@ -107,9 +107,15 @@ public class CalculoService {
                 }
             }
 
+            boolean selicComEc136 =
+                    calculo.getTipoCorrecao() == TipoCorrecao.SELIC
+                            && calculo.getTipoEmenda() == TipoEmenda.EC136;
+
             // ---- Correção monetária (fator acumulado) ----
             BigDecimal fatorCorrecao =
-                    calcularFatorCorrecao(
+                    selicComEc136
+                            ? BigDecimal.ONE
+                            : calcularFatorCorrecao(
                             calculo.getTipoCorrecao(),
                             dataParcela,
                             dataFinalCorrecaoJuros);
@@ -153,10 +159,14 @@ public class CalculoService {
             LocalDate inicioSelicLinha = null;
 
             if (dataInicioSelic != null) {
-                inicioSelicLinha =
-                        dataParcela.isBefore(dataInicioSelic)
-                                ? dataInicioSelic
-                                : dataParcela;
+                if (selicComEc136) {
+                    inicioSelicLinha = dataParcela;
+                } else {
+                    inicioSelicLinha =
+                            dataParcela.isBefore(dataInicioSelic)
+                                    ? dataInicioSelic
+                                    : dataParcela;
+                }
             }
 
             BigDecimal taxaSelic = BigDecimal.ZERO;
@@ -832,7 +842,11 @@ public class CalculoService {
         }
 
         BigDecimal taxaMensal =
-                BigDecimal.valueOf(0.1667);
+                BigDecimal.valueOf(2)
+                        .divide(
+                                BigDecimal.valueOf(12),
+                                ESCALA_INTERMEDIARIA,
+                                RoundingMode.HALF_UP);
 
         BigDecimal acumulado = BigDecimal.ZERO;
 
