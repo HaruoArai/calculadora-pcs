@@ -14,7 +14,7 @@ public enum TipoCorrecao {
             "SELIC (07/1994 em diante)"
     ),
     TR_IPCAE(
-            "TR (07/1994 até 25/03/2015) → de IPCA-E (26/03/2015 em diante)"
+            "TR (07/1994 até 25/03/2015); após, IPCA-E (26/03/2015 em diante)"
     );
 
     private final String descricao;
