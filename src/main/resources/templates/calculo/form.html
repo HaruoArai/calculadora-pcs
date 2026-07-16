@@ -272,7 +272,7 @@
 
             <div id="parcelas-container">
 
-                <div class="linha-parcela grid grid-3"
+                <div class="linha-parcela grid grid-4"
                      th:each="parcela, stat : *{parcelas}"
                      th:data-index="${stat.index}">
 
@@ -291,6 +291,19 @@
                               th:if="${#fields.hasErrors('parcelas[' + stat.index + '].dataParcela')}"
                               th:errors="*{parcelas[__${stat.index}__].dataParcela}">
                         </span>
+                    </div>
+
+                    <div class="campo">
+                        <label class="form-label"
+                               th:style="${stat.index > 0} ? 'visibility:hidden' : ''">
+                            Descrição
+                        </label>
+
+                        <input type="text"
+                               class="form-control descricao-parcela"
+                               maxlength="120"
+                               placeholder="Opcional (FGTS, Férias, Danos Morais...)"
+                               th:field="*{parcelas[__${stat.index}__].descricaoParcela}">
                     </div>
 
                     <div class="campo">

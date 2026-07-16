@@ -113,6 +113,9 @@ public class CalculoController {
             parcela.setCalculo(calculo);
             parcela.setDataParcela(parcelaDTO.getDataParcela());
             parcela.setValorParcela(parcelaDTO.getValorParcela());
+            parcela.setDescricaoParcela(
+                    parcelaDTO.getDescricaoParcela()
+            );
 
             calculo.getParcelas().add(parcela);
         }
@@ -165,6 +168,9 @@ public class CalculoController {
             ParcelaFormDTO parcelaDTO = new ParcelaFormDTO();
             parcelaDTO.setDataParcela(parcela.getDataParcela());
             parcelaDTO.setValorParcela(parcela.getValorParcela());
+            parcelaDTO.setDescricaoParcela(
+                    parcela.getDescricaoParcela()
+            );
 
             form.getParcelas().add(parcelaDTO);
         }

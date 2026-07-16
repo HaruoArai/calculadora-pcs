@@ -18,6 +18,9 @@ public class ItemCalculo {
 
     private LocalDate data;
 
+    @Column(length = 120)
+    private String descricaoParcela;
+
     private BigDecimal valorDevido;
 
     @Column(precision = 38, scale = 7) // base de cálculo do mês
@@ -72,6 +75,13 @@ public class ItemCalculo {
 
     public LocalDate getData() { return data; }
     public void setData(LocalDate data) { this.data = data; }
+
+    public String getDescricaoParcela() {
+        return descricaoParcela;
+    }
+    public void setDescricaoParcela(String descricaoParcela) {
+        this.descricaoParcela = descricaoParcela;
+    }
 
     public BigDecimal getValorDevido() { return valorDevido; }
     public void setValorDevido(BigDecimal valorDevido) { this.valorDevido = valorDevido; }

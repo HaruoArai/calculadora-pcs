@@ -255,6 +255,35 @@
             page-break-inside: avoid;
         }
 
+        /* ==============================
+       NUMERAÇÃO DE PÁGINAS
+       ============================== */
+
+        @page {
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: Helvetica, sans-serif;
+                font-size: 8.5px;
+                color: #999;
+            }
+        }
+
+        /* ==============================
+       DESCRIÇÃO DA PARCELA
+       ============================== */
+        .celula-data {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .descricao-parcela-pdf {
+            margin-top: 2px;
+            font-size: 9px;
+            color: #4a5568;
+            font-style: italic;
+            line-height: 1.2;
+        }
+
     </style>
 </head>
 
@@ -388,7 +417,13 @@
         </thead>
         <tbody>
         <tr th:each="item : ${calculo.itens}">
-            <td th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></td>
+            <td class="celula-data">
+                <div th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></div>
+                <div class="descricao-parcela-pdf"
+                     th:if="${item.descricaoParcela != null and !item.descricaoParcela.isBlank()}"
+                     th:text="${item.descricaoParcela}">
+                </div>
+            </td>
             <td th:text="${#numbers.formatDecimal(item.valorDevido,1,'POINT',2,'COMMA')}"></td>
             <td th:text="${#numbers.formatDecimal(item.indiceCorrecao,1,'POINT',7,'COMMA')}"></td>
             <td th:text="${#numbers.formatDecimal(item.valorAtualizado,1,'POINT',2,'COMMA')}"></td>
@@ -440,7 +475,13 @@
         </thead>
         <tbody>
         <tr th:each="item : ${calculo.itens}">
-            <td th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></td>
+            <td class="celula-data">
+                <div th:text="${#temporals.format(item.data,'dd/MM/yyyy')}"></div>
+                <div class="descricao-parcela-pdf"
+                     th:if="${item.descricaoParcela != null and !item.descricaoParcela.isBlank()}"
+                     th:text="${item.descricaoParcela}">
+                </div>
+            </td>
             <td th:text="${#numbers.formatDecimal(item.baseEc136,1,'POINT',2,'COMMA')}"></td>
             <td th:text="|${#numbers.formatDecimal(item.correcaoSelicIpca,1,2)}%|"></td>
             <td th:text="${#numbers.formatDecimal(item.valorCorrecaoSelicIpca,1,'POINT',2,'COMMA')}"></td>

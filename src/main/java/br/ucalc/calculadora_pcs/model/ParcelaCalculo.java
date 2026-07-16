@@ -16,6 +16,9 @@ public class ParcelaCalculo {
 
     private BigDecimal valorParcela;
 
+    @Column(length = 120)
+    private String descricaoParcela;
+
     @ManyToOne
     @JoinColumn(name = "calculo_id")
     private Calculo calculo;
@@ -31,4 +34,11 @@ public class ParcelaCalculo {
 
     public Calculo getCalculo() { return calculo; }
     public void setCalculo(Calculo calculo) { this.calculo = calculo; }
+
+    public String getDescricaoParcela() {
+        return descricaoParcela;
+    }
+    public void setDescricaoParcela(String descricaoParcela) {
+        this.descricaoParcela = descricaoParcela;
+    }
 }

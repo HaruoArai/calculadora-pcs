@@ -1,6 +1,5 @@
 package br.ucalc.calculadora_pcs.dto;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,6 +15,9 @@ public class ParcelaFormDTO {
     @NotNull(message = "Informe o valor da parcela")
     private BigDecimal valorParcela;
 
+    // Campo opcional
+    private String descricaoParcela;
+
     public LocalDate getDataParcela() {
         return dataParcela;
     }
@@ -30,5 +32,12 @@ public class ParcelaFormDTO {
 
     public void setValorParcela(BigDecimal valorParcela) {
         this.valorParcela = valorParcela;
+    }
+
+    public String getDescricaoParcela() {
+        return descricaoParcela;
+    }
+    public void setDescricaoParcela(String descricaoParcela) {
+        this.descricaoParcela = descricaoParcela;
     }
 }

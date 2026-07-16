@@ -20,6 +20,24 @@
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
+.linha-parcela.grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 56px;
+}
+
+.campo-botao-parcela {
+    width: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.campo-botao-parcela .btn {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+}
+
 .campo {
     display: flex;
     flex-direction: column;
@@ -117,6 +135,23 @@
 /* Responsividade */
 @media (max-width: 900px) {
     .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .linha-parcela.grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .campo-botao-parcela {
+        width: auto;
+        align-items: flex-end;
+    }
+}
+
+@media (max-width: 600px) {
+    .linha-parcela.grid-4 {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 600px) {
@@ -314,11 +349,12 @@
    LINHA DE PARCELA
    ========================================== */
 
-.linha-parcela {
-    grid-template-columns: 1fr 1fr auto !important;
+.linha-parcela.grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 56px;
     align-items: start;
-    margin-bottom: 0.35rem;
+    column-gap: 1rem;
     row-gap: 0.25rem;
+    margin-bottom: 0.35rem;
 }
 
 .linha-parcela .campo {

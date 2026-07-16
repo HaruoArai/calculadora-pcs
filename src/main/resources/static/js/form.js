@@ -222,21 +222,25 @@ document.addEventListener('DOMContentLoaded', () => {
             linha.dataset.index = index;
 
             const dataInput = linha.querySelector('.data-parcela');
+            const descricaoInput = linha.querySelector('.descricao-parcela');
             const valorInput = linha.querySelector('.valor-parcela');
 
             dataInput.name = `parcelas[${index}].dataParcela`;
             dataInput.id = `parcelas${index}.dataParcela`;
+
+            descricaoInput.name = `parcelas[${index}].descricaoParcela`;
+            descricaoInput.id = `parcelas${index}.descricaoParcela`;
 
             valorInput.name = `parcelas[${index}].valorParcela`;
             valorInput.id = `parcelas${index}.valorParcela`;
         });
     }
 
-    function criarLinhaParcela(dataSugerida = '', valorSugerido = '0,00') {
+    function criarLinhaParcela(dataSugerida = '', descricaoSugerida = '', valorSugerido = '0,00') {
         const index = parcelasContainer.querySelectorAll('.linha-parcela').length;
 
         const linha = document.createElement('div');
-        linha.className = 'linha-parcela grid grid-3';
+        linha.className = 'linha-parcela grid grid-4';
         linha.dataset.index = index;
 
         linha.innerHTML = `
@@ -250,6 +254,19 @@ document.addEventListener('DOMContentLoaded', () => {
                        name="parcelas[${index}].dataParcela"
                        id="parcelas${index}.dataParcela"
                        value="${dataSugerida}">
+            </div>
+            
+            <div class="campo">
+                <label class="form-label" style="visibility:hidden">
+                    Descrição
+                </label>
+                <input type="text"
+                       class="form-control descricao-parcela"
+                       maxlength="120"
+                       placeholder="Opcional (FGTS, Férias, Danos Morais...)"
+                       name="parcelas[${index}].descricaoParcela"
+                       id="parcelas${index}.descricaoParcela"
+                       value="${descricaoSugerida}">
             </div>
         
             <div class="campo">
@@ -295,10 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const linhas = parcelasContainer.querySelectorAll('.linha-parcela');
             const ultimaLinha = linhas[linhas.length - 1];
             const ultimaData = ultimaLinha.querySelector('.data-parcela').value;
+            const ultimaDescricao =
+                ultimaLinha.querySelector('.descricao-parcela')?.value ?? '';
 
             const novaData = somarUmMes(ultimaData);
 
-            criarLinhaParcela(novaData, '0,00');
+            criarLinhaParcela(novaData, ultimaDescricao, '0,00');
             reindexarParcelas();
 
             // Rola para mostrar a nova parcela criada

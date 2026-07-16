@@ -85,6 +85,7 @@ public class CalculoService {
             ItemCalculo item = new ItemCalculo();
             item.setCalculo(calculo);
             item.setData(dataParcela); // Assim o resultado mostra a data real da parcela, como 15/01/2025, e não sempre o dia 1
+            item.setDescricaoParcela(parcela.getDescricaoParcela());
             item.setValorDevido(valorBase);
 
             // DATA DE INÍCIO DOS JUROS DA LINHA
