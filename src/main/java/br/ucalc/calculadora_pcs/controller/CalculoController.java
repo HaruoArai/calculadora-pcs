@@ -24,6 +24,10 @@ import br.ucalc.calculadora_pcs.service.PdfService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.io.IOException;
 
 import java.math.BigDecimal;
@@ -222,4 +226,7 @@ public class CalculoController {
 
         response.getOutputStream().write(pdf);
     }
+
+    @Value("${app.importacao.chave}")
+    private String chaveImportacao;
 }
