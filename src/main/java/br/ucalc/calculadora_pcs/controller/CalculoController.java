@@ -191,13 +191,16 @@ public class CalculoController {
     @GetMapping("/importar-indices")
     @ResponseBody
     public String importarIndices() throws Exception {
+
         System.out.println("Iniciando importação...");
 
         indiceEconomicoRepository.deleteAllInBatch();
 
         System.out.println("Tabela limpa.");
 
-        indiceImportacaoService.importar("arquivos/indices.xlsx");
+        indiceImportacaoService.importarDoClasspath(
+                "indices/indices.xlsx"
+        );
 
         System.out.println("Importação finalizada.");
 
