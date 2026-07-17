@@ -11,10 +11,7 @@ import org.springframework.context.annotation.Bean;
 public class CalculadoraPcsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(
-				CalculadoraPcsApplication.class,
-				args
-		);
+		SpringApplication.run(CalculadoraPcsApplication.class, args);
 	}
 
 	@Bean
@@ -24,7 +21,15 @@ public class CalculadoraPcsApplication {
 	) {
 		return args -> {
 
-			if (repository.count() == 0) {
+			System.out.println("Verificando tabela de índices...");
+
+			long quantidade = repository.count();
+
+			System.out.println(
+					"Quantidade atual de índices: " + quantidade
+			);
+
+			if (quantidade == 0) {
 
 				System.out.println(
 						"Banco vazio. Iniciando importação dos índices..."
