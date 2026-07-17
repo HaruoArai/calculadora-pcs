@@ -4,14 +4,14 @@ import br.ucalc.calculadora_pcs.model.IndiceEconomico;
 import br.ucalc.calculadora_pcs.model.enums.TipoIndice;
 import br.ucalc.calculadora_pcs.repository.IndiceEconomicoRepository;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class IndiceImportacaoService {
@@ -22,39 +22,89 @@ public class IndiceImportacaoService {
         this.repository = repository;
     }
 
-    public void importar(String caminhoArquivo) throws Exception {
+    public void importarDoClasspath(String caminhoArquivo) throws Exception {
 
-        FileInputStream fis = new FileInputStream(caminhoArquivo);
-        Workbook workbook = WorkbookFactory.create(fis);
+        ClassPathResource resource = new ClassPathResource(caminhoArquivo);
 
-        Sheet sheet = workbook.getSheetAt(0);
-        DataFormatter formatter = new DataFormatter();
-
-        List<IndiceEconomico> indices = new ArrayList<>();
-
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-
-            Row row = sheet.getRow(i);
-            if (row == null) continue;
-
-            String tipo = formatter.formatCellValue(row.getCell(0)).trim();
-            String referencia = formatter.formatCellValue(row.getCell(1)).trim();
-
-            if (tipo.isEmpty() || referencia.isEmpty()) continue;
-
-            double valor = row.getCell(2).getNumericCellValue();
-
-            IndiceEconomico indice = new IndiceEconomico();
-            indice.setTipo(TipoIndice.valueOf(tipo));
-            indice.setReferencia(YearMonth.parse(referencia));
-            indice.setValor(BigDecimal.valueOf(valor));
-
-            indices.add(indice);
+        if (!resource.exists()) {
+            throw new IllegalStateException(
+                    "Planilha de índices não encontrada: " + caminhoArquivo
+            );
         }
 
-        repository.saveAll(indices);
+        try (
+                InputStream inputStream = resource.getInputStream();
+                Workbook workbook = WorkbookFactory.create(inputStream)
+        ) {
+            Sheet sheet = workbook.getSheetAt(0);
+            DataFormatter formatter = new DataFormatter();
 
-        workbook.close();
-        fis.close();
+            List<IndiceEconomico> indices = new ArrayList<>();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+
+                Row row = sheet.getRow(i);
+
+                if (row == null) {
+                    continue;
+                }
+
+                String tipoTexto =
+                        formatter.formatCellValue(row.getCell(0)).trim();
+
+                String referenciaTexto =
+                        formatter.formatCellValue(row.getCell(1)).trim();
+
+                String valorTexto =
+                        formatter.formatCellValue(row.getCell(2)).trim();
+
+                if (tipoTexto.isEmpty()
+                        || referenciaTexto.isEmpty()
+                        || valorTexto.isEmpty()) {
+                    continue;
+                }
+
+                TipoIndice tipo = TipoIndice.valueOf(
+                        tipoTexto.toUpperCase()
+                );
+
+                YearMonth referencia =
+                        YearMonth.parse(referenciaTexto);
+
+                BigDecimal valor =
+                        converterValor(row.getCell(2), valorTexto);
+
+                IndiceEconomico indice = new IndiceEconomico();
+                indice.setTipo(tipo);
+                indice.setReferencia(referencia);
+                indice.setValor(valor);
+
+                indices.add(indice);
+            }
+
+            repository.saveAll(indices);
+
+            System.out.println(
+                    indices.size() + " índices econômicos importados."
+            );
+        }
+    }
+
+    private BigDecimal converterValor(
+            Cell cell,
+            String valorTexto
+    ) {
+        if (cell != null
+                && cell.getCellType() == CellType.NUMERIC) {
+            return BigDecimal.valueOf(
+                    cell.getNumericCellValue()
+            );
+        }
+
+        String valorNormalizado = valorTexto
+                .replace(".", "")
+                .replace(",", ".");
+
+        return new BigDecimal(valorNormalizado);
     }
 }
