@@ -132,15 +132,26 @@
     animation-delay: 0.08s;
 }
 
-/* Responsividade */
+/* ==========================================
+   RESPONSIVIDADE DAS PARCELAS
+   ========================================== */
+
+/* Tablet (até 900px): 2 colunas + botão */
 @media (max-width: 900px) {
     .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
-}
 
-@media (max-width: 900px) {
     .linha-parcela.grid-4 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
     }
+
+    /* Data e Descrição na primeira linha */
+    .linha-parcela.grid-4 .campo:nth-child(1) { grid-column: 1; }
+    .linha-parcela.grid-4 .campo:nth-child(2) { grid-column: 2; }
+
+    /* Valor e Botão na segunda linha */
+    .linha-parcela.grid-4 .campo:nth-child(3) { grid-column: 1; }
+    .linha-parcela.grid-4 .campo-botao-parcela { grid-column: 2; align-self: end; }
 
     .campo-botao-parcela {
         width: auto;
@@ -148,9 +159,25 @@
     }
 }
 
+/* Mobile (até 600px): 1 coluna, tudo empilhado */
 @media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+
     .linha-parcela.grid-4 {
         grid-template-columns: 1fr;
+        grid-template-rows: unset;
+    }
+
+    .linha-parcela.grid-4 .campo:nth-child(1),
+    .linha-parcela.grid-4 .campo:nth-child(2),
+    .linha-parcela.grid-4 .campo:nth-child(3),
+    .linha-parcela.grid-4 .campo-botao-parcela {
+        grid-column: 1;
+    }
+
+    .campo-botao-parcela {
+        width: 100%;
+        align-items: flex-start;
     }
 }
 
