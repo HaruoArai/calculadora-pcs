@@ -327,6 +327,80 @@
         </details>
     </div>
 
+    <!-- ===== RESUMO FINANCEIRO ===== -->
+    <div class="card-processo resumo-calculo">
+        <h5>
+            <svg class="icone-secao"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            Resumo Financeiro
+        </h5>
+
+        <div class="resumo-financeiro">
+            <div class="resumo-linha">
+                <span class="resumo-label">Subtotal:</span>
+                <strong class="resumo-valor">
+                    R$
+                    <span th:text="${#numbers.formatDecimal(
+                        calculo.subtotal,
+                        1,
+                        'POINT',
+                        2,
+                        'COMMA')}">
+                    </span>
+                </strong>
+            </div>
+
+            <div class="resumo-linha"
+                 th:if="${calculo.aplicarHonorarios}">
+
+                <span class="resumo-label">
+                    Honorários
+                    (<span th:text="${#numbers.formatDecimal(
+                            calculo.percentualHonorarios,
+                            1,
+                            'POINT',
+                            2,
+                            'COMMA')}">
+                    </span>%):
+                </span>
+
+                <strong class="resumo-valor">
+                    R$
+                    <span th:text="${#numbers.formatDecimal(
+                        calculo.valorHonorarios,
+                        1,
+                        'POINT',
+                        2,
+                        'COMMA')}">
+                    </span>
+                </strong>
+            </div>
+            <div class="resumo-linha resumo-total">
+                <span class="resumo-label resumo-label-total">
+                    Total Geral:
+                </span>
+
+                <strong class="resumo-valor resumo-valor-total">
+                    R$
+                    <span th:text="${#numbers.formatDecimal(
+                        calculo.totalGeral,
+                        1,
+                        'POINT',
+                        2,
+                        'COMMA')}">
+                    </span>
+                </strong>
+            </div>
+        </div>
+    </div>
+
     <div class="acoes-resultado">
         <div class="acoes-esquerda">
             <a th:href="@{/calculo/novo}" class="btn btn-secondary">

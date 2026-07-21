@@ -284,6 +284,34 @@
             line-height: 1.2;
         }
 
+        /* ==============================
+        TABELA RESUMO
+        ============================== */
+        .tabela-resumo {
+            width: 42%;
+            margin-left: auto;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .tabela-resumo td {
+            border: 1px solid #d8dee8;
+            padding: 6px 8px;
+            font-size: 11px;
+        }
+
+        .tabela-resumo .valor {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .total-geral td {
+            background: #e8eef5;
+            border-top: 2px solid #0d2b4e;
+            color: #0d2b4e;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 
@@ -528,6 +556,69 @@
             <div class="legenda-item" style="grid-column: span 2"><strong>Total:</strong> Base EC 136 + Valor Correção Selic + Valor Juros Selic + Valor Atualizado + Correção sobre Juros Selic + Valor Juros.</div>
         </div>
     </div>
+</div>
+
+<div class="secao">
+    <div class="secao-titulo">
+        Resumo Financeiro
+    </div>
+    <table class="tabela-resumo">
+        <tbody>
+        <tr>
+            <td>Subtotal</td>
+            <td class="valor">
+                R$
+                <span
+                        th:text="${#numbers.formatDecimal(
+                    calculo.subtotal,
+                    1,
+                    'POINT',
+                    2,
+                    'COMMA')}">
+                </span>
+            </td>
+        </tr>
+        <tr
+                th:if="${calculo.aplicarHonorarios}">
+            <td>
+                Honorários
+                (<span
+                    th:text="${#numbers.formatDecimal(
+                    calculo.percentualHonorarios,
+                    1,
+                    'POINT',
+                    2,
+                    'COMMA')}">
+                </span>%)
+            </td>
+            <td class="valor">
+                R$
+                <span
+                        th:text="${#numbers.formatDecimal(
+                    calculo.valorHonorarios,
+                    1,
+                    'POINT',
+                    2,
+                    'COMMA')}">
+                </span>
+            </td>
+        </tr>
+        <tr class="total-geral">
+            <td>Total Geral</td>
+            <td class="valor">
+                R$
+                <span
+                        th:text="${#numbers.formatDecimal(
+                    calculo.totalGeral,
+                    1,
+                    'POINT',
+                    2,
+                    'COMMA')}">
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- RODAPÉ FIXO -->

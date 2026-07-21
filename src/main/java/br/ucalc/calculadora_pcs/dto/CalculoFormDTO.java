@@ -16,6 +16,10 @@ import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
+
 @ValidarDataCitacao
 public class CalculoFormDTO {
 
@@ -50,6 +54,18 @@ public class CalculoFormDTO {
 
     @NotNull(message = "Selecione o tipo de juros")
     private TipoJuros tipoJuros;
+
+    private Boolean aplicarHonorarios = false;
+
+    @DecimalMin(
+            value = "0.01",
+            message = "O percentual dos honorários deve ser maior que zero"
+    )
+    @DecimalMax(
+            value = "100.00",
+            message = "O percentual dos honorários não pode ser maior que 100%"
+    )
+    private BigDecimal percentualHonorarios;
 
     // Getters e Setters
     public String getAutor() { return autor; }
@@ -111,4 +127,17 @@ public class CalculoFormDTO {
     public TipoJuros getTipoJuros() { return tipoJuros; }
     public void setTipoJuros(TipoJuros tipoJuros) { this.tipoJuros = tipoJuros; }
 
+    public Boolean getAplicarHonorarios() {
+        return aplicarHonorarios;
+    }
+    public void setAplicarHonorarios(Boolean aplicarHonorarios) {
+        this.aplicarHonorarios = aplicarHonorarios;
+    }
+
+    public BigDecimal getPercentualHonorarios() {
+        return percentualHonorarios;
+    }
+    public void setPercentualHonorarios(BigDecimal percentualHonorarios) {
+        this.percentualHonorarios = percentualHonorarios;
+    }
 }

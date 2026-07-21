@@ -363,8 +363,87 @@
             </div>
         </div>
 
+        <!-- ================= HONORÁRIOS ADVOCATÍCIOS ================= -->
+        <div class="card-secao">
 
-                    <!-- ================= AÇÕES ================= -->
+            <h5>
+                <svg class="icone-secao"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <line x1="8" y1="16" x2="16" y2="8"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <circle cx="15.5" cy="15.5" r="1.5"/>
+                </svg>
+
+                Honorários
+            </h5>
+
+            <div class="honorarios-linha">
+
+                <div class="campo">
+
+                    <label class="form-label fw-semibold">
+                        Aplicar honorários?
+                    </label>
+
+                    <div class="opcoes-emenda">
+
+                        <label class="opcao-chip">
+                            <input type="radio"
+                                   th:field="*{aplicarHonorarios}"
+                                   id="honorariosNao"
+                                   value="false">
+                            <span>Não aplicar</span>
+                        </label>
+
+                        <label class="opcao-chip">
+                            <input type="radio"
+                                   th:field="*{aplicarHonorarios}"
+                                   id="honorariosSim"
+                                   value="true">
+                            <span>Aplicar</span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <div class="campo campo-percentual-honorarios">
+
+                    <label for="percentualHonorarios"
+                           class="form-label fw-semibold">
+                        Percentual dos Honorários
+                    </label>
+
+                    <div class="input-percentual">
+
+                        <input type="text"
+                               min="0"
+                               max="100"
+                               step="0.01"
+                               class="form-control"
+                               th:field="*{percentualHonorarios}"
+                               id="percentualHonorarios"
+                               placeholder="Ex.: 10,00"
+                               inputmode="decimal">
+
+                        <span>%</span>
+
+                    </div>
+
+                    <span class="text-danger"
+                          th:if="${#fields.hasErrors('percentualHonorarios')}"
+                          th:errors="*{percentualHonorarios}">
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= AÇÕES ================= -->
         <div class="barra-acoes">
             <button type="submit" class="btn btn-destaque" id="btn-calcular">
                 <span class="btn-texto">Calcular</span>

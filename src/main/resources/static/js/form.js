@@ -64,6 +64,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function formatarPercentualInicial(input) {
+        if (!input || !input.value) {
+            return;
+        }
+        const numero = Number(
+            input.value.replace(",", ".")
+        );
+        if (!isNaN(numero)) {
+            input.value = numero.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+    }
+
     // ---------- Máscara de data dd/mm/aaaa ----------
     document.querySelectorAll('.mask-data').forEach(aplicarMascaraData);
 
@@ -85,6 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         .replace(',', '.');
                 }
             });
+
+            if (percentualHonorarios && percentualHonorarios.value) {
+                percentualHonorarios.value =
+                    percentualHonorarios.value.replace(",", ".");
+            }
 
             // Feedback visual de carregamento
             const btn = document.getElementById('btn-calcular');
@@ -337,6 +357,32 @@ document.addEventListener('DOMContentLoaded', () => {
             reindexarParcelas();
         });
     }
+
+    // ---------- Honorários ----------
+    const honorariosNao = document.getElementById("honorariosNao");
+    const honorariosSim = document.getElementById("honorariosSim");
+    const percentualHonorarios = document.getElementById("percentualHonorarios");
+    formatarPercentualInicial(percentualHonorarios);
+
+    function atualizarCampoHonorarios() {
+
+        if (!honorariosNao || !honorariosSim || !percentualHonorarios) {
+            return;
+        }
+
+        if (honorariosSim.checked) {
+            percentualHonorarios.disabled = false;
+        } else {
+            percentualHonorarios.disabled = true;
+            percentualHonorarios.value = "";
+        }
+    }
+
+    honorariosNao?.addEventListener("change", atualizarCampoHonorarios);
+    honorariosSim?.addEventListener("change", atualizarCampoHonorarios);
+
+    atualizarCampoHonorarios();
+
     // ---------- Bootstrap Tooltips ----------
     // Inicializa todos os tooltips da página
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {

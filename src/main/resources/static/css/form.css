@@ -484,3 +484,108 @@
         flex-shrink: 0;
     }
 }
+
+/* ==========================================
+   CAMPO DE PERCENTUAL DOS HONORÁRIOS
+   ========================================== */
+
+.honorarios-linha {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.honorarios-linha .campo {
+    margin-bottom: 0;
+}
+
+.honorarios-linha > .campo:first-child .opcoes-emenda {
+    margin-top: 4px;
+}
+
+.campo-percentual-honorarios {
+    min-width: 300px;
+}
+
+.campo-percentual-honorarios .text-danger {
+    display: block;
+    min-height: 22px;
+    margin-top: 4px;
+}
+
+.input-percentual {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.input-percentual:focus-within {
+    border-color: var(--azul-secundario);
+    box-shadow: 0 0 0 3px rgba(21,64,110,.15);
+}
+
+.input-percentual input {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    min-width: 0;
+    text-align: center;
+}
+
+.input-percentual input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.input-percentual span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    background: var(--azul-claro);
+    color: var(--azul-principal);
+    font-weight: 700;
+    border-left: 1px solid var(--cinza-borda);
+}
+
+.input-percentual input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.input-percentual:has(input:disabled) {
+    opacity: .75;
+}
+
+
+/* ==========================================
+   TABELA RESUMO
+   ========================================== */
+
+.tabela-resumo {
+    width: 45%;
+    margin-top: 20px;
+    margin-left: auto;
+    border-collapse: collapse;
+}
+
+.tabela-resumo td {
+    padding: 7px 8px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.tabela-resumo .valor {
+    text-align: right;
+    font-weight: bold;
+}
+
+.tabela-resumo .total-geral td {
+    border-top: 2px solid #0d2b4e;
+    color: #0d2b4e;
+    font-weight: bold;
+}
+

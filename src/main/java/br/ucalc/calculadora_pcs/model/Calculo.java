@@ -40,6 +40,21 @@ public class Calculo {
     @Enumerated(EnumType.STRING)
     private TipoEmenda tipoEmenda;
 
+    @Column(nullable = false)
+    private Boolean aplicarHonorarios = false;
+
+    @Column(precision = 10, scale = 4)
+    private BigDecimal percentualHonorarios;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal subtotal = BigDecimal.ZERO;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal valorHonorarios = BigDecimal.ZERO;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal totalGeral = BigDecimal.ZERO;
+
     // Valor devido inicial informado pelo usuário (base de cálculo do 1º mês)
     private BigDecimal valorDevidoInicial;
 
@@ -97,6 +112,41 @@ public class Calculo {
     }
     public void setTipoEmenda(TipoEmenda tipoEmenda) {
         this.tipoEmenda = tipoEmenda;
+    }
+
+    public Boolean getAplicarHonorarios() {
+        return Boolean.TRUE.equals(aplicarHonorarios);
+    }
+    public void setAplicarHonorarios(Boolean aplicarHonorarios) {
+        this.aplicarHonorarios = Boolean.TRUE.equals(aplicarHonorarios);
+    }
+
+    public BigDecimal getPercentualHonorarios() {
+        return percentualHonorarios;
+    }
+    public void setPercentualHonorarios(BigDecimal percentualHonorarios) {
+        this.percentualHonorarios = percentualHonorarios;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public BigDecimal getValorHonorarios() {
+        return valorHonorarios;
+    }
+    public void setValorHonorarios(BigDecimal valorHonorarios) {
+        this.valorHonorarios = valorHonorarios;
+    }
+
+    public BigDecimal getTotalGeral() {
+        return totalGeral;
+    }
+    public void setTotalGeral(BigDecimal totalGeral) {
+        this.totalGeral = totalGeral;
     }
 
     public BigDecimal getValorDevidoInicial() { return valorDevidoInicial; }

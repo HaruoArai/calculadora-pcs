@@ -543,3 +543,52 @@
     background-color: var(--amarelo-destaque);
     color: var(--branco);
 }
+
+.resumo-financeiro{
+    width:100%;
+}
+
+.resumo-linha{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    width:100%;
+
+    padding:.65rem 0;
+
+    border-bottom:1px solid #edf1f4;
+}
+
+.resumo-label{
+    color:#6f7b86;
+    font-size:.9rem;
+    font-weight:500;
+}
+
+.resumo-valor{
+    color:var(--cinza-texto);
+    font-size:.95rem;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+}
+
+.resumo-total{
+    margin-top:.35rem;
+    padding-top:.75rem;
+
+    border-top:1px solid rgba(13,43,78,.12);
+
+    border-bottom:none;
+}
+
+.resumo-label-total{
+    color:var(--azul-principal);
+    font-weight:700;
+}
+
+.resumo-valor-total{
+    color:var(--azul-principal);
+    font-size:1.0rem;
+    font-weight:700;
+}

@@ -79,6 +79,15 @@ public class CalculoController {
                            BindingResult result,
                            Model model) {
 
+        if (Boolean.TRUE.equals(form.getAplicarHonorarios())
+                && form.getPercentualHonorarios() == null) {
+
+            result.rejectValue(
+                    "percentualHonorarios",
+                    "required",
+                    "Informe o percentual dos honorários");
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("tiposCorrecao", TipoCorrecao.values());
             model.addAttribute("tiposJuros", TipoJuros.values());
@@ -108,6 +117,9 @@ public class CalculoController {
         calculo.setTipoRegraJuros(form.getTipoRegraJuros());
         calculo.setTipoEmenda(form.getTipoEmenda());
 
+        calculo.setAplicarHonorarios(form.getAplicarHonorarios());
+        calculo.setPercentualHonorarios(form.getPercentualHonorarios());
+
         // Mantém a primeira parcela no cálculo apenas para referência
         calculo.setDataParcela(form.getParcelas().get(0).getDataParcela());
         calculo.setValorDevidoInicial(form.getParcelas().get(0).getValorParcela());
@@ -131,6 +143,9 @@ public class CalculoController {
                         form.getParcelas());
         itens.forEach(item -> item.setCalculo(calculo));
         calculo.setItens(itens);
+
+        // Calcula subtotal, honorários e total geral
+        calculoService.calcularResumoFinanceiro(calculo, itens);
 
         calculoRepository.save(calculo);
 
@@ -165,6 +180,9 @@ public class CalculoController {
         form.setTipoJuros(calculo.getTipoJuros());
         form.setTipoRegraJuros(calculo.getTipoRegraJuros());
         form.setTipoEmenda(calculo.getTipoEmenda());
+
+        form.setAplicarHonorarios(calculo.getAplicarHonorarios());
+        form.setPercentualHonorarios(calculo.getPercentualHonorarios());
 
         form.getParcelas().clear();
 

@@ -323,6 +323,68 @@ public class CalculoService {
         return itens;
     }
 
+    public void calcularResumoFinanceiro(
+            Calculo calculo,
+            List<ItemCalculo> itens) {
+
+        BigDecimal subtotal = itens.stream()
+                .map(item -> obterTotalFinalItem(calculo, item))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(ESCALA_FINAL, RoundingMode.HALF_UP);
+
+        BigDecimal valorHonorarios = BigDecimal.ZERO;
+
+        boolean deveAplicarHonorarios =
+                Boolean.TRUE.equals(calculo.getAplicarHonorarios());
+
+        BigDecimal percentual =
+                calculo.getPercentualHonorarios();
+
+        if (deveAplicarHonorarios
+                && percentual != null
+                && percentual.compareTo(BigDecimal.ZERO) > 0) {
+
+            valorHonorarios = subtotal
+                    .multiply(
+                            percentual.divide(
+                                    CEM,
+                                    ESCALA_INTERMEDIARIA,
+                                    RoundingMode.HALF_UP))
+                    .setScale(
+                            ESCALA_FINAL,
+                            RoundingMode.HALF_UP);
+        }
+
+        BigDecimal totalGeral = subtotal
+                .add(valorHonorarios)
+                .setScale(
+                        ESCALA_FINAL,
+                        RoundingMode.HALF_UP);
+
+        calculo.setSubtotal(subtotal);
+        calculo.setValorHonorarios(valorHonorarios);
+        calculo.setTotalGeral(totalGeral);
+    }
+
+    private BigDecimal obterTotalFinalItem(
+            Calculo calculo,
+            ItemCalculo item) {
+
+        if (calculo.getTipoEmenda() == TipoEmenda.EC136
+                && item.getValorTotalEc136() != null
+                && item.getValorTotalEc136()
+                .compareTo(BigDecimal.ZERO) > 0) {
+
+            return item.getValorTotalEc136();
+        }
+
+        if (item.getTotal() == null) {
+            return BigDecimal.ZERO;
+        }
+
+        return item.getTotal();
+    }
+
     private BigDecimal buscarIndiceCorrecao(
             TipoCorrecao tipoCorrecao,
             YearMonth mes) {
