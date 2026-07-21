@@ -281,30 +281,28 @@ body {
    ============================================ */
 
 @media (max-width: 768px) {
-    .cabecalho-sistema {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
+    .cabecalho-sistema{
+        padding:1rem;
     }
 
-    .logo-sistema {
-        height: 52px; /* reduz de 80px para 52px no mobile */
+    .logo-sistema{
+        height:48px;
     }
 
-    .titulo-container h1 {
-        font-size: 1.2rem;
+    .titulo-container{
+        align-items:center;
     }
 
-    .titulo-container .subtitulo {
-        font-size: 0.8rem;
+    .titulo-container h1{
+        font-size:1.1rem;
+        line-height:1.25;
     }
 
-    .container {
-        padding: 1rem;
+    .titulo-container .subtitulo{
+        font-size:.78rem;
     }
 
-    .card-secao {
-        padding: 1rem;
+    .titulo-container{
+        max-width:300px;
     }
 }
