@@ -379,6 +379,30 @@
 }
 
 /* ==========================================
+   RESPONSIVIDADE DOS DEMAIS CAMPOS
+   Não altera Dados das Parcelas
+   ========================================== */
+
+/* Tablet */
+@media (max-width: 900px) {
+
+    .grid-3:not(.linha-parcela),
+    .grid-4:not(.linha-parcela) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Celular */
+@media (max-width: 600px) {
+
+    .grid-2:not(.linha-parcela),
+    .grid-3:not(.linha-parcela),
+    .grid-4:not(.linha-parcela) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ==========================================
    DADOS DAS PARCELAS — RESPONSIVO
    Afeta somente a seção de parcelas
    ========================================== */
