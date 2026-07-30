@@ -23,10 +23,10 @@ import java.math.BigDecimal;
 @ValidarDataCitacao
 public class CalculoFormDTO {
 
-    @NotBlank(message = "Informe o autor")
+    //@NotBlank(message = "Informe o autor")
     private String autor;
 
-    @NotBlank(message = "Informe o réu")
+    //@NotBlank(message = "Informe o réu")
     private String reu;
 
     private String autos;

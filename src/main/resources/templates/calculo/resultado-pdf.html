@@ -328,31 +328,44 @@
     </div>
 
     <!-- DADOS DO PROCESSO -->
-    <div class="secao">
+    <div class="secao"
+         th:if="${!#strings.isEmpty(calculo.processo.autor)
+          or !#strings.isEmpty(calculo.processo.reu)
+          or !#strings.isEmpty(calculo.processo.autos)
+          or !#strings.isEmpty(calculo.processo.comarca)
+          or !#strings.isEmpty(calculo.processo.vara)
+          or !#strings.isEmpty(calculo.processo.pgenet)}">
+
         <div class="secao-titulo">Dados do Processo</div>
 
         <div class="info-linha">
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.autor)}">
                 <span class="label">Autor</span>
                 <span class="valor" th:text="${calculo.processo.autor}"></span>
             </div>
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.reu)}">
                 <span class="label">Réu</span>
                 <span class="valor" th:text="${calculo.processo.reu}"></span>
             </div>
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.autos)}">
                 <span class="label">Autos</span>
                 <span class="valor" th:text="${calculo.processo.autos}"></span>
             </div>
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.comarca)}">
                 <span class="label">Comarca</span>
                 <span class="valor" th:text="${calculo.processo.comarca}"></span>
             </div>
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.vara)}">
                 <span class="label">Vara</span>
                 <span class="valor" th:text="${calculo.processo.vara}"></span>
             </div>
-            <div class="info-celula">
+            <div class="info-celula"
+                 th:if="${!#strings.isEmpty(calculo.processo.pgenet)}">
                 <span class="label">PGENET</span>
                 <span class="valor" th:text="${calculo.processo.pgenet}"></span>
             </div>
